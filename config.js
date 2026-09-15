@@ -18,7 +18,8 @@
    - LIVE_URLS : lien du direct de chaque soir (YouTube non répertorié), ouvert par
      rejoindre.html (lien perso) et direct.html (lien commun, demande l'e-mail).
      Vide = « le lien s'active à 19h45 le jour J ».
-   - RESERVATION_URL : questionnaire Tally de réservation de l'appel stratégie.
+   - RESERVATION_URL : événement iClosed « Appel Stratégie - Bootcamp Investisseurs 3.0 » (questions + calendrier).
+     Après réservation, iClosed redirige vers appel-confirme.html (tag « a réservé » + pixel Schedule).
      Affiché sur rejoindre.html et direct.html après le soir 3, avec ?i=<Id>.
    - META_PIXEL_ID : pixel Meta. Vide = aucun pixel. Avec PIXEL_CONSENT à true,
      il ne se charge qu'après « Accepter » (règle CNIL).
@@ -77,7 +78,7 @@ window.CONFIG = {
   VIDEO_MERCI_URL: "",
   GROUPES_WHATSAPP: [],
   LIVE_URLS: ["", "", ""],
-  RESERVATION_URL: "",
+  RESERVATION_URL: "https://app.iclosed.io/e/investisseurs-3-0/appel-strategie-bootcamp?utm_source=bootcamp&utm_campaign=bootcamp-oct26",
   META_PIXEL_ID: "",
   PIXEL_CONSENT: true,
   COMPTEUR_MIN: 300,
@@ -261,8 +262,9 @@ window.BOOTCAMP = (function () {
       b.querySelector('.non').addEventListener('click', function () { try { localStorage.setItem('bootcamp-consent', 'non'); } catch (e) {} file.length = 0; b.remove(); });
     }
     return {
-      evt: function (nom, standard, params) {
+      evt: function (nom, standard, params, options) {
         var a = [standard ? 'trackSingle' : 'trackSingleCustom', id, nom, params || {}];
+        if (options) a.push(options);
         if (charge && window.fbq) fbq.apply(null, a); else file.push(a);
       }
     };

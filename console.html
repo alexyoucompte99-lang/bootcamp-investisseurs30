@@ -184,6 +184,7 @@
         <p class="sous">Inscrits uniques passés par leur lien personnel ou la page du direct · objectif <span id="objPres">750</span></p>
         <div class="soirs-p" id="presents"></div>
         <div class="legende"><span><i></i>Présents</span><span><i class="obj"></i>Objectif</span></div>
+        <p class="sous" id="appels" style="margin-top:14px"></p>
       </section>
 
       <section class="carte c7">
@@ -279,7 +280,7 @@
       whatsapp: { avec_tel: 1864, consentis: 1502 },
       situation: [["Mon épargne dort sur des livrets ou comptes", 512], ["J'ai une assurance vie ou un conseiller à la banque", 398], ["J'investis déjà un peu seul", 301], ["J'ai déjà une stratégie mais je veux mieux faire", 104]],
       qualif_repondu: 1391,
-      presents: [812, 694, 0], clics_sans_id: [23, 17, 0]
+      presents: [812, 694, 0], clics_sans_id: [23, 17, 0], appels: 64
     };
   }
 
@@ -316,6 +317,7 @@
 
     colonnes(jours);
     presents(d.presents || [0, 0, 0], d.clics_sans_id || [], objP);
+    $('appels').innerHTML = '<b>Appels stratégie réservés : ' + nf.format(d.appels || 0) + '</b> · objectif 300 (' + pct((d.appels || 0) / 300, 0) + ')';
     ab(va, vb);
     barres($('situation'), d.situation || [], 'réponses');
     $('qualifSous').textContent = 'Réponses facultatives de la page merci · ' + nf.format(d.qualif_repondu || 0) + ' inscrits ont répondu (' + pct((d.qualif_repondu || 0) / Math.max(1, d.inscrits || 0), 0) + ')';

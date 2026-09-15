@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Votre appel est réservé | Bootcamp Investisseurs 3.0</title>
+<meta name="theme-color" content="#0f1927">
+<link rel="icon" type="image/svg+xml" href="assets/logo-i3.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<!--
+  Page de confirmation de l'événement iClosed « Appel Stratégie - Bootcamp Investisseurs 3.0 »
+  (Page de confirmation > Redirection). iClosed transmet dans l'URL : invitee_full_name,
+  Invitee_email, event_start_time, event_end_time, timeZone, assigned_to + les UTM.
+  - envoie etape=appel au webhook : colonne « Appel réservé » du Sheet + tag systeme.io
+    bootcamp-oct26-appel (qui retire les relances de réservation, règle R5)
+  - pixel Meta Schedule (si META_PIXEL_ID), une fois par réservation (eventID = e-mail + créneau)
+  - sans paramètres iClosed (visite directe, test) : rien n'est envoyé
+-->
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { min-height: 100vh; min-height: 100dvh; background: #0f1927; color: #fff; font-family: "Montserrat", -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.6; padding: 32px 20px 48px;
+    background-image: radial-gradient(ellipse at 50% -10%, rgba(128, 185, 165, 0.22), transparent 60%); }
+  .boite { max-width: 560px; margin: 0 auto; }
+  img.logo { height: 36px; width: auto; display: block; margin: 0 auto 28px; }
+  .ok { width: 64px; height: 64px; border-radius: 50%; border: 2px solid #80b9a5; display: grid; place-items: center; margin: 0 auto 18px; }
+  .ok svg { width: 30px; height: 30px; stroke: #80b9a5; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  h1 { font-weight: 900; font-size: 1.9rem; line-height: 1.2; text-align: center; letter-spacing: -0.015em; }
+  .quand { text-align: center; margin-top: 10px; color: rgba(255, 255, 255, 0.8); }
+  .quand strong { color: #80b9a5; }
+  .carte { background: #f6f4ef; color: #0f1927; border-radius: 18px; padding: 24px 22px; margin-top: 26px; }
+  .carte h2 { font-weight: 800; font-size: 1.1rem; margin-bottom: 14px; }
+  .etape { display: flex; gap: 14px; padding: 12px 0; border-top: 1px solid rgba(15, 25, 39, 0.1); }
+  .etape:first-of-type { border-top: 0; }
+  .num { flex: none; width: 28px; height: 28px; border-radius: 50%; background: #0f1927; color: #fff; font-weight: 800; font-size: 0.85rem; display: grid; place-items: center; }
+  .etape strong { display: block; font-size: 0.95rem; }
+  .etape span { font-size: 0.88rem; color: rgba(15, 25, 39, 0.72); }
+  .note { margin-top: 22px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.75); text-align: center; }
+  .pied { margin-top: 30px; font-size: 0.72rem; color: rgba(255, 255, 255, 0.45); text-align: center; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="boite">
+  <img class="logo" src="assets/logo-i3-blanc.svg" alt="Investisseurs 3.0">
+  <div class="ok" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+  <h1 id="titre">Votre appel est réservé.</h1>
+  <p class="quand" id="quand" hidden></p>
+
+  <div class="carte">
+    <h2>Pour en tirer le maximum, 3 choses avant l'appel</h2>
+    <div class="etape"><div class="num">1</div><div><strong>Confirmez l'invitation reçue par e-mail</strong><span>Elle contient le lien de la visio. Sans confirmation, le créneau peut être libéré.</span></div></div>
+    <div class="etape"><div class="num">2</div><div><strong>Notez où en est votre argent aujourd'hui</strong><span>Livrets, assurance vie, placements, ce que vous mettez de côté chaque mois. Des chiffres approximatifs suffisent.</span></div></div>
+    <div class="etape"><div class="num">3</div><div><strong>Écrivez votre objectif en une phrase</strong><span>Et les questions que vous n'avez pas pu poser pendant le Bootcamp. Prévoyez 45 minutes au calme, sur ordinateur si possible.</span></div></div>
+  </div>
+
+  <p class="note">Un empêchement ? Utilisez le lien de l'e-mail de confirmation pour déplacer votre appel : le créneau sera proposé à quelqu'un d'autre.</p>
+  <p class="pied">Investisseurs 3.0, organisme de formation. Investir comporte un risque de perte en capital. L'appel ne constitue pas un conseil en investissement personnalisé.</p>
+</div>
+<script>
+(function () {
+  const C = window.CONFIG, B = window.BOOTCAMP;
+  const P = new URLSearchParams(location.search);
+  const param = noms => { for (const n of noms) { const v = P.get(n); if (v) return v.trim(); } return ''; };
+  const email = param(['Invitee_email', 'invitee_email', 'email']).toLowerCase();
+  const nom = param(['invitee_full_name', 'invitee_name', 'name']);
+  const debut = param(['event_start_time', 'start_time']);
+  const closer = param(['assigned_to']);
+  const prenom = nom.split(/\s+/)[0] || '';
+  if (prenom) document.getElementById('titre').textContent = prenom.charAt(0).toUpperCase() + prenom.slice(1) + ', votre appel est réservé.';
+  const d = debut ? new Date(debut) : null;
+  if (d && !isNaN(d)) {
+    const q = document.getElementById('quand');
+    const txt = new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }).format(d).replace(':', 'h');
+    q.innerHTML = '<strong></strong>' + (closer ? ' avec ' : '');
+    q.firstChild.textContent = txt;
+    if (closer) q.appendChild(document.createTextNode(closer));
+    q.hidden = false;
+  }
+  if (!email || !debut) return;
+  const cle = 'bootcamp-appel-' + email + '|' + debut;
+  let deja = false;
+  try { deja = localStorage.getItem(cle) === '1'; localStorage.setItem(cle, '1'); } catch (e) {}
+  if (deja) return;
+  B.balise({ etape: 'appel', email: email, debut: debut, closer: closer,
+    utm_source: P.get('utm_source') || '', utm_campaign: P.get('utm_campaign') || '', utm_content: P.get('utm_content') || '',
+    test: P.get('test') === '1' });
+  let h = 2166136261;
+  for (const ch of cle) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  B.pixel().evt('Schedule', true, { content_name: 'appel-strategie-bootcamp' }, { eventID: 'bc-' + h.toString(16) });
+})();
+</script>
+</body>
+</html>
