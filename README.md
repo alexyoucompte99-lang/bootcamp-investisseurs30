@@ -20,7 +20,7 @@ Pages statiques (GitHub Pages prévu : `alexyoucompte99-lang/bootcamp-investisse
 | `VIDEO_MERCI_URL` | vidéo de 60 s de la page merci | encart « Vidéo bientôt disponible » |
 | `GROUPES_WHATSAPP` | liens d'invitation, un ou plusieurs (tirage au hasard, mémorisé par navigateur) | bouton masqué, « le lien arrive par e-mail » |
 | `LIVE_URLS` | `[soir1, soir2, soir3]`, liens YouTube non répertoriés | « Le lien s'active à 19h45 » |
-| `RESERVATION_URL` | Tally de réservation de l'appel stratégie (reçoit `?i=<Id>`) | pas de bouton après le soir 3 |
+| `RESERVATION_URL` | événement iClosed « Appel Stratégie - Bootcamp Investisseurs 3.0 » (redirige ensuite vers `appel-confirme.html`) | pas de bouton après le soir 3 |
 | `META_PIXEL_ID` | pixel Meta dédié (ne pas reprendre celui du funnel VSL sans arbitrage) | aucun pixel |
 | `URL_PAGE` | adresse publique finale (sous-domaine ensuite) | sert aux liens perso et à l'agenda : à mettre à jour si le domaine change, **et** la Script Property `URL_SITE` du webhook |
 | `STATS_KEY` | clé de la route stats, identique à `STATS_KEY_DEFAUT` du webhook | déjà générée |
