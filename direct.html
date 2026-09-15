@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Le direct du Bootcamp | Investisseurs 3.0</title>
+<meta property="og:title" content="Rejoindre le direct du Bootcamp Investisseurs 3.0">
+<meta property="og:description" content="3 soirées en direct avec Thomas Mayol. Le direct s'ouvre à 19h45 chaque soir.">
+<meta property="og:image" content="https://alexyoucompte99-lang.github.io/bootcamp-investisseurs30/assets/og.jpg">
+<meta name="theme-color" content="#0f1927">
+<link rel="icon" type="image/svg+xml" href="assets/logo-i3.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<!--
+  Page COMMUNE du direct, pour ceux qui arrivent sans lien personnel
+  (lien posté dans le groupe WhatsApp, e-mails génériques) :
+    https://…/bootcamp-investisseurs30/direct.html
+  Entre 19h45 et 22h30 un soir du Bootcamp : demande l'e-mail (mémorisé sur ce
+  navigateur, pré-rempli les soirs suivants), envoie etape=rejoint { email, soir }
+  au webhook (2,5 s maximum), puis ouvre LIVE_URLS[soir]. L'accès n'est jamais
+  bloqué : webhook muet ou en erreur = redirection quand même.
+  Avec ?i=<Id> la page se comporte comme rejoindre.html (pas de formulaire).
+  Test : ?maintenant=2026-10-21T19:50:00%2B02:00 (marqué test).
+-->
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; background: #0f1927; color: #fff;
+    font-family: "Montserrat", -apple-system, "Segoe UI", sans-serif; padding: 24px; text-align: center; -webkit-font-smoothing: antialiased; line-height: 1.6;
+    background-image: radial-gradient(ellipse at 50% -10%, rgba(128, 185, 165, 0.22), transparent 60%); }
+  .boite { width: 100%; max-width: 440px; }
+  img.logo { height: 36px; width: auto; margin: 0 auto 28px; display: block; }
+  .tag { display: inline-flex; align-items: center; gap: 8px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #80b9a5; border: 1px solid rgba(128, 185, 165, 0.45); border-radius: 100px; padding: 5px 13px; margin-bottom: 16px; }
+  .tag.direct::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #de7362; animation: pouls 1.8s ease infinite; }
+  @keyframes pouls { 50% { box-shadow: 0 0 0 6px rgba(222, 115, 98, 0); } 0%, 100% { box-shadow: 0 0 0 0 rgba(222, 115, 98, 0.5); } }
+  h1 { font-weight: 900; font-size: 1.6rem; line-height: 1.22; margin-bottom: 10px; letter-spacing: -0.015em; text-wrap: balance; }
+  h1 em { font-style: normal; color: #80b9a5; }
+  p { color: rgba(255, 255, 255, 0.76); font-size: 0.95rem; }
+  p + p { margin-top: 10px; }
+  form { margin-top: 22px; text-align: left; }
+  label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: rgba(255, 255, 255, 0.9); }
+  input[type=email] { width: 100%; font-family: inherit; font-size: 1.05rem; color: #0f1927; background: #fff; border: 2px solid transparent; border-radius: 12px; padding: 14px; outline: none; }
+  input[type=email]:focus { border-color: #80b9a5; box-shadow: 0 0 0 4px rgba(128, 185, 165, 0.25); }
+  .err { font-size: 0.8rem; font-weight: 600; color: #f3a497; margin-top: 6px; }
+  .aide { font-size: 0.76rem; color: rgba(255, 255, 255, 0.55); margin-top: 8px; text-align: center; }
+  .btn { display: flex; width: 100%; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; background: #80b9a5; color: #0f1927; font-family: inherit; font-weight: 800; font-size: 1.05rem; text-decoration: none; border: 0; border-radius: 13px; padding: 17px 24px; cursor: pointer; box-shadow: 0 16px 36px -16px rgba(128, 185, 165, 0.6); }
+  .btn:disabled { opacity: 0.75; cursor: wait; }
+  .btn.second { background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid rgba(255, 255, 255, 0.18); margin-top: 10px; font-weight: 700; font-size: 0.9rem; box-shadow: none; }
+  .btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+  .spin { width: 36px; height: 36px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.2); border-top-color: #80b9a5; margin: 0 auto 18px; animation: t 0.8s linear infinite; }
+  @keyframes t { to { transform: rotate(360deg); } }
+  .pied { margin-top: 28px; font-size: 0.72rem; color: rgba(255, 255, 255, 0.45); line-height: 1.5; }
+  .pied a { color: rgba(255, 255, 255, 0.65); }
+</style>
+</head>
+<body>
+<div class="boite">
+  <img class="logo" src="assets/logo-i3-blanc.svg" alt="Investisseurs 3.0">
+
+  <!-- Soir en cours : e-mail puis direct -->
+  <div id="entree" hidden>
+    <span class="tag direct" id="entreeTag">Soir 1 · en direct</span>
+    <h1 id="entreeTitre">Où part votre argent</h1>
+    <p>Entrez l'e-mail de votre inscription pour rejoindre le direct.</p>
+    <form id="form" novalidate>
+      <label for="email">Votre e-mail</label>
+      <input type="email" id="email" autocomplete="email" inputmode="email" placeholder="prenom@exemple.com" enterkeyhint="go" maxlength="120">
+      <p class="err" id="err" hidden>Cet e-mail ne semble pas valide.</p>
+      <button class="btn" id="btn" type="submit">Rejoindre le direct <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      <p class="aide">Pas encore inscrit ? Entrez votre e-mail quand même, vous recevrez le replay et les ressources.</p>
+    </form>
+  </div>
+
+  <!-- Redirection -->
+  <div id="ouvre" hidden>
+    <div class="spin" aria-hidden="true"></div>
+    <h1>Ouverture du direct…</h1>
+    <p>Si rien ne se passe dans quelques secondes :</p>
+    <a class="btn" id="lienLive" href="#">Rejoindre le direct</a>
+  </div>
+
+  <!-- Soir en cours, lien pas encore renseigné -->
+  <div id="bientot" hidden>
+    <span class="tag" id="bientotTag">Soir 1 · ce soir</span>
+    <h1>Le direct s'ouvre à 19h45.</h1>
+    <p>Gardez cette page ouverte et rechargez-la dans quelques minutes.</p>
+    <a class="btn" href="" id="recharger">Recharger la page</a>
+  </div>
+
+  <!-- Hors fenêtre : prochaine date -->
+  <div id="attente" hidden>
+    <span class="tag" id="attenteTag">Soir 1</span>
+    <h1>Rendez-vous <em id="quand">mardi 20 octobre à 20h</em>.</h1>
+    <p id="attenteTitre"></p>
+    <p>Le direct s'ouvre à 19h45 le jour J, sur cette même page.</p>
+    <a class="btn" id="agenda" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Ajouter à Google Agenda</a>
+    <a class="btn second" id="ics" href="#" download="bootcamp-investisseurs30.ics">Apple, Outlook : les 3 soirs en un fichier</a>
+  </div>
+
+  <!-- Après le soir 3 -->
+  <div id="fini" hidden>
+    <span class="tag">Bootcamp terminé</span>
+    <h1>Merci d'avoir suivi le <em>Bootcamp</em>.</h1>
+    <p id="finiTexte">Les replays sont accessibles aux inscrits jusqu'au jeudi 29 octobre à minuit.</p>
+    <a class="btn" id="resa" href="#" target="_blank" rel="noopener" hidden>Réserver mon appel stratégie</a>
+  </div>
+
+  <p class="pied">Investir comporte un risque de perte en capital. Le Bootcamp a une vocation pédagogique. <a href="index.html#mentions">Confidentialité</a></p>
+</div>
+
+<script>
+(function () {
+  const C = window.CONFIG, B = window.BOOTCAMP;
+  const $ = id => document.getElementById(id);
+  const P = new URLSearchParams(location.search);
+  const ID = B.idValide(P.get('i')) ? P.get('i') : '';
+  const TEST = P.get('test') === '1' || P.has('maintenant');
+  const SOIRS = B.soirs();
+  const t = B.maintenant();
+  const montrer = el => { ['entree', 'ouvre', 'bientot', 'attente', 'fini'].forEach(k => { $(k).hidden = k !== el; }); };
+
+  function ouvrirDirect(url) {
+    $('lienLive').href = url;
+    montrer('ouvre');
+    setTimeout(() => { location.replace(url); }, 300);
+  }
+
+  const enCours = SOIRS.find(s => t >= s.ouverture.getTime() && t < s.fermeture.getTime());
+  if (enCours) {
+    if (!enCours.liveUrl) {
+      $('bientotTag').textContent = 'Soir ' + enCours.n + ' · ce soir';
+      $('recharger').href = location.href;
+      montrer('bientot');
+      return;
+    }
+    /* Arrivée avec un lien personnel : pas de formulaire */
+    if (ID) {
+      B.balise({ etape: 'rejoint', id: ID, soir: enCours.n, horodateur: new Date(t).toISOString(), appareil: B.appareil(), test: TEST });
+      ouvrirDirect(enCours.liveUrl);
+      return;
+    }
+    $('entreeTag').textContent = 'Soir ' + enCours.n + ' · en direct';
+    $('entreeTitre').textContent = enCours.titre;
+    let memo = '';
+    try { memo = localStorage.getItem('bootcamp-email') || ''; } catch (e) {}
+    $('email').value = memo;
+    montrer('entree');
+    (memo ? $('btn') : $('email')).focus();
+
+    $('form').addEventListener('submit', async ev => {
+      ev.preventDefault();
+      const email = $('email').value.trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { $('err').hidden = false; $('email').focus(); return; }
+      $('err').hidden = true;
+      try { localStorage.setItem('bootcamp-email', email); } catch (e) {}
+      const btn = $('btn');
+      btn.disabled = true; btn.textContent = 'Ouverture…';
+      /* 2,5 s maximum : webhook lent ou en panne = on ouvre le direct quand même */
+      try {
+        await B.envoyer({ etape: 'rejoint', email, soir: enCours.n, horodateur: new Date(t).toISOString(), appareil: B.appareil(), test: TEST, source: 'direct' }, 2500);
+      } catch (e) {}
+      ouvrirDirect(enCours.liveUrl);
+    });
+    return;
+  }
+
+  const prochain = SOIRS.find(s => s.debut.getTime() > t);
+  if (prochain) {
+    $('attenteTag').textContent = 'Soir ' + prochain.n + ' · ' + prochain.titre;
+    $('quand').textContent = prochain.date + ' à ' + prochain.heure;
+    $('attenteTitre').textContent = prochain.promesse;
+    $('agenda').href = B.googleAgenda(prochain, ID);
+    $('ics').href = B.icsDataUrl(ID);
+    montrer('attente');
+    return;
+  }
+
+  montrer('fini');
+  const finAppels = new Date('2026-10-29T23:59:59+01:00');
+  if (C.RESERVATION_URL && t < finAppels.getTime()) {
+    $('resa').href = C.RESERVATION_URL + (ID ? (C.RESERVATION_URL.indexOf('?') > -1 ? '&' : '?') + 'i=' + ID : '');
+    $('resa').hidden = false;
+    $('finiTexte').textContent = "Les appels stratégie sont ouverts jusqu'au jeudi 29 octobre à 23h59, et les replays restent accessibles aux inscrits jusque-là.";
+  } else if (t >= finAppels.getTime()) {
+    $('finiTexte').textContent = 'Les replays et les appels stratégie du Bootcamp sont fermés. Merci de votre participation.';
+  }
+})();
+</script>
+</body>
+</html>

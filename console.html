@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Console Bootcamp | Investisseurs 3.0</title>
+<meta name="theme-color" content="#0f1927">
+<link rel="icon" type="image/svg+xml" href="assets/logo-i3.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<!--
+  Console de pilotage du Bootcamp. Page publique : elle ne lit QUE des agrégats
+  (WEBHOOK_URL?action=stats&cle=STATS_KEY), jamais de nom, d'e-mail ou de téléphone.
+  Le code d'accès est un simple rideau (sessionStorage), pas une sécurité.
+-->
+<style>
+  :root {
+    --navy: #0f1927; --sauge: #80b9a5; --sauge-fonce: #497a66; --creme: #f6f4ef; --blanc: #fff;
+    --encre: #0f1927; --encre-2: #4d5968; --encre-3: #7a8491; --ligne: #e6e3dc; --grille: #ece9e2;
+    --serie: #497a66; --va: #3d7fb0; --vb: #c47a35; --alerte: #b3402f;
+    --police: "Montserrat", -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { overflow-x: hidden; }
+  body { background: var(--creme); color: var(--encre); font-family: var(--police); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
+
+  /* Rideau */
+  .rideau { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--navy); padding: 24px; }
+  .rideau form { width: 100%; max-width: 360px; text-align: center; color: #fff; }
+  .rideau img { height: 36px; margin: 0 auto 22px; display: block; }
+  .rideau h1 { font-weight: 900; font-size: 1.3rem; margin-bottom: 6px; }
+  .rideau p { color: rgba(255, 255, 255, 0.65); margin-bottom: 18px; }
+  .rideau input { width: 100%; font: 600 1rem var(--police); padding: 13px 14px; border-radius: 11px; border: 2px solid transparent; outline: none; text-align: center; letter-spacing: 0.08em; }
+  .rideau input:focus { border-color: var(--sauge); }
+  .rideau button { width: 100%; margin-top: 10px; font: 800 1rem var(--police); color: var(--navy); background: var(--sauge); border: 0; border-radius: 11px; padding: 13px; cursor: pointer; }
+  .rideau .faux { color: #f3a497; font-weight: 600; margin: 10px 0 0; }
+
+  /* En-tête */
+  header { background: var(--navy); color: #fff; padding: 16px 0; }
+  header .wrap { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  header img { height: 30px; }
+  header h1 { font-weight: 800; font-size: 1rem; letter-spacing: 0.01em; }
+  header h1 small { display: block; font-weight: 500; font-size: 0.74rem; color: rgba(255, 255, 255, 0.6); }
+  .tete-droite { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .maj { font-size: 0.76rem; color: rgba(255, 255, 255, 0.7); text-align: right; }
+  .maj b { color: #fff; }
+  .btn-maj { font: 700 0.8rem var(--police); color: var(--navy); background: var(--sauge); border: 0; border-radius: 9px; padding: 9px 13px; cursor: pointer; }
+  .demo { display: flex; align-items: center; gap: 12px; background: #fff4e0; border-bottom: 1px solid #efd9ad; color: #6b4a12; padding: 10px 0; font-size: 0.84rem; }
+  .demo .wrap { display: flex; gap: 12px; align-items: center; }
+  .demo b.pastille { flex: none; font-weight: 900; letter-spacing: 0.12em; color: #fff; background: #a3620f; border-radius: 6px; padding: 3px 9px; font-size: 0.78rem; }
+
+  main { padding: 22px 0 50px; }
+  .grille { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
+  .carte { background: var(--blanc); border: 1px solid var(--ligne); border-radius: 16px; padding: 18px 20px; min-width: 0; }
+  .c3 { grid-column: span 3; } .c4 { grid-column: span 4; } .c5 { grid-column: span 5; } .c6 { grid-column: span 6; } .c7 { grid-column: span 7; } .c8 { grid-column: span 8; } .c12 { grid-column: span 12; }
+  .carte h2 { font-weight: 800; font-size: 0.95rem; margin-bottom: 2px; }
+  .carte .sous { font-size: 0.78rem; color: var(--encre-3); margin-bottom: 14px; }
+  .vide { color: var(--encre-3); font-size: 0.85rem; padding: 18px 0; text-align: center; }
+
+  /* Tuiles */
+  .tuile .lib { font-size: 0.78rem; font-weight: 600; color: var(--encre-2); }
+  .tuile .val { font-weight: 800; font-size: 2rem; letter-spacing: -0.02em; line-height: 1.15; margin-top: 4px; }
+  .tuile .val small { font-size: 0.95rem; font-weight: 600; color: var(--encre-3); letter-spacing: 0; }
+  .tuile .det { font-size: 0.78rem; color: var(--encre-3); margin-top: 4px; }
+  .hero-tuile .val { font-size: 3.2rem; }
+  .jauge { position: relative; height: 10px; border-radius: 6px; background: #e3ece8; margin-top: 12px; overflow: hidden; }
+  .jauge i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px; background: var(--serie); }
+
+  /* Colonnes (inscrits par jour) */
+  .colonnes { position: relative; height: 220px; display: flex; align-items: flex-end; gap: 2px; padding: 0 0 26px 34px; }
+  .axe-y { position: absolute; left: 0; top: 0; bottom: 26px; width: 100%; pointer-events: none; }
+  .axe-y div { position: absolute; left: 34px; right: 0; border-top: 1px solid var(--grille); }
+  .axe-y span { position: absolute; left: -34px; top: -8px; width: 28px; text-align: right; font-size: 0.68rem; color: var(--encre-3); font-variant-numeric: tabular-nums; }
+  .col { position: relative; flex: 1; height: 100%; display: flex; align-items: flex-end; justify-content: center; cursor: default; }
+  .col i { display: block; width: 100%; max-width: 24px; background: var(--serie); border-radius: 4px 4px 0 0; min-height: 1px; }
+  .col:hover i { background: #3b6655; }
+  .col em { position: absolute; bottom: -22px; font-style: normal; font-size: 0.66rem; color: var(--encre-3); white-space: nowrap; }
+  .col b { position: absolute; font-size: 0.68rem; font-weight: 700; color: var(--encre-2); white-space: nowrap; }
+
+  /* Barres horizontales */
+  .barres { display: grid; gap: 10px; }
+  .barre-l { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; }
+  .barre-l .nom { font-size: 0.82rem; font-weight: 600; color: var(--encre); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .barre-l .chiffre { font-size: 0.82rem; font-weight: 700; color: var(--encre); font-variant-numeric: tabular-nums; text-align: right; }
+  .barre-l .chiffre small { font-weight: 500; color: var(--encre-3); margin-left: 4px; }
+  .barre-l .piste { grid-column: 1 / -1; position: relative; height: 12px; }
+  .barre-l .piste i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--serie); border-radius: 0 4px 4px 0; min-width: 2px; }
+  .barre-l .piste .objectif { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--navy); }
+
+  /* A/B */
+  table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  th { text-align: right; font-weight: 600; font-size: 0.72rem; color: var(--encre-3); padding: 0 8px 8px; border-bottom: 1px solid var(--ligne); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; padding-left: 0; }
+  td { text-align: right; padding: 10px 8px; border-bottom: 1px solid var(--grille); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.var-nom { white-space: normal; }
+  td:last-child, th:last-child { padding-right: 0; }
+  .cle { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 8px; vertical-align: 0; }
+  .var-nom small { display: block; font-size: 0.72rem; color: var(--encre-3); font-weight: 500; margin-left: 18px; }
+  .verdict { margin-top: 14px; font-size: 0.84rem; padding: 10px 12px; border-radius: 10px; background: var(--creme); color: var(--encre-2); }
+  .verdict b { color: var(--encre); }
+  .ab-barres { display: grid; gap: 10px; margin-top: 16px; }
+  .ab-barres .piste i.a { background: var(--va); }
+  .ab-barres .piste i.b { background: var(--vb); }
+  .scroll-x { overflow-x: auto; }
+
+  /* Présents */
+  .soirs-p { display: grid; gap: 16px; }
+  .legende { display: flex; gap: 14px; align-items: center; font-size: 0.74rem; color: var(--encre-3); margin-top: 12px; }
+  .legende span { display: inline-flex; align-items: center; gap: 6px; }
+  .legende i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: var(--serie); }
+  .legende i.obj { width: 2px; height: 12px; border-radius: 0; background: var(--navy); }
+
+  #tip { position: fixed; z-index: 99; pointer-events: none; background: var(--navy); color: #fff; font-size: 0.78rem; line-height: 1.4; border-radius: 8px; padding: 7px 10px; box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.5); max-width: 260px; }
+  #tip b { color: var(--sauge); }
+
+  @media (max-width: 1000px) {
+    .c3 { grid-column: span 6; } .c4, .c5, .c6, .c7, .c8 { grid-column: span 12; }
+  }
+  @media (max-width: 560px) {
+    .c3 { grid-column: span 12; }
+    .hero-tuile .val { font-size: 2.4rem; }
+    .tete-droite { margin-left: 0; width: 100%; justify-content: space-between; }
+  }
+</style>
+</head>
+<body>
+
+<div class="rideau" id="rideau" hidden>
+  <form id="formCode">
+    <img src="assets/logo-i3-blanc.svg" alt="Investisseurs 3.0">
+    <h1>Console du Bootcamp</h1>
+    <p>Entrez le code d'accès.</p>
+    <input type="password" id="code" autocomplete="current-password" aria-label="Code d'accès" placeholder="Code">
+    <button type="submit">Ouvrir</button>
+    <p class="faux" id="faux" hidden>Code incorrect.</p>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <header>
+    <div class="wrap">
+      <img src="assets/logo-i3-blanc.svg" alt="Investisseurs 3.0">
+      <h1>Console du Bootcamp<small>20, 21 et 22 octobre 2026 · agrégats uniquement</small></h1>
+      <div class="tete-droite">
+        <p class="maj">Mise à jour <b id="maj">·</b><br><span id="prochaine">Rafraîchissement auto toutes les 60 s</span></p>
+        <button class="btn-maj" id="btnMaj" type="button">Rafraîchir</button>
+      </div>
+    </div>
+  </header>
+  <div class="demo" id="demo" hidden><div class="wrap"><b class="pastille">DÉMO</b><span id="demoTexte">Données de démonstration.</span></div></div>
+
+  <main>
+    <div class="wrap grille">
+      <section class="carte tuile hero-tuile c6">
+        <p class="lib">Inscrits</p>
+        <p class="val"><span id="kInscrits">0</span> <small>/ <span id="kObjectif">3 000</span></small></p>
+        <div class="jauge" role="img" id="jaugeInscrits"><i id="jaugeFill" style="width:0"></i></div>
+        <p class="det" id="kInscritsDet">·</p>
+      </section>
+      <section class="carte tuile c3">
+        <p class="lib">Accord WhatsApp</p>
+        <p class="val" id="kWa">0 %</p>
+        <p class="det" id="kWaDet">·</p>
+      </section>
+      <section class="carte tuile c3">
+        <p class="lib">Taux d'inscription global</p>
+        <p class="val" id="kTaux">0 %</p>
+        <p class="det" id="kTauxDet">·</p>
+      </section>
+
+      <section class="carte c8">
+        <h2>Inscrits par jour</h2>
+        <p class="sous">Date de la première inscription, heure de Paris</p>
+        <div id="parJour"></div>
+      </section>
+
+      <section class="carte c4">
+        <h2>Présents par soir</h2>
+        <p class="sous">Inscrits uniques passés par leur lien personnel ou la page du direct · objectif <span id="objPres">750</span></p>
+        <div class="soirs-p" id="presents"></div>
+        <div class="legende"><span><i></i>Présents</span><span><i class="obj"></i>Objectif</span></div>
+      </section>
+
+      <section class="carte c7">
+        <h2>Test A/B du haut de page</h2>
+        <p class="sous">Visiteurs uniques de la page → inscrits, par variante</p>
+        <div class="scroll-x"><table id="ab"></table></div>
+        <div class="ab-barres" id="abBarres"></div>
+        <p class="verdict" id="abVerdict"></p>
+      </section>
+
+      <section class="carte c5">
+        <h2>Où en sont les inscrits</h2>
+        <p class="sous" id="qualifSous">Réponses facultatives de la page merci</p>
+        <div class="barres" id="situation"></div>
+      </section>
+
+      <section class="carte c5">
+        <h2>Inscrits par source</h2>
+        <p class="sous">utm_source</p>
+        <div class="barres" id="sources"></div>
+      </section>
+
+      <section class="carte c7">
+        <h2>Top ads</h2>
+        <p class="sous">utm_content · inscrits, visiteurs et taux d'inscription</p>
+        <div class="scroll-x"><table id="ads"></table></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div id="tip" hidden></div>
+
+<script>
+(function () {
+  const C = window.CONFIG;
+  const CODE = 'bootcamp26';
+  const $ = id => document.getElementById(id);
+  const nf = new Intl.NumberFormat('fr-FR');
+  const pct = (x, d = 1) => (isFinite(x) ? (x * 100).toFixed(d).replace('.', ',') : '0') + ' %';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  /* Info-bulle : le HTML (valeurs déjà échappées) est échappé une 2e fois pour l'attribut */
+  const tipAttr = html => ' data-tip="' + esc(html) + '"';
+
+  /* ---------- Rideau (code simple, gardé le temps de l'onglet) ---------- */
+  function ouvrir() { $('rideau').hidden = true; $('app').hidden = false; charger(); setInterval(charger, 60000); }
+  let ok = false;
+  try { ok = sessionStorage.getItem('bootcamp-console') === '1'; } catch (e) {}
+  if (!ok && new URLSearchParams(location.search).get('code') === CODE) { ok = true; try { sessionStorage.setItem('bootcamp-console', '1'); } catch (e) {} }
+  if (ok) ouvrir(); else { $('rideau').hidden = false; $('code').focus(); }
+  $('formCode').addEventListener('submit', ev => {
+    ev.preventDefault();
+    if ($('code').value.trim().toLowerCase() === CODE) { try { sessionStorage.setItem('bootcamp-console', '1'); } catch (e) {} ouvrir(); }
+    else { $('faux').hidden = false; $('code').select(); }
+  });
+  $('btnMaj').addEventListener('click', () => charger());
+
+  /* ---------- Données ---------- */
+  async function charger() {
+    $('btnMaj').disabled = true;
+    let d = null, raison = '';
+    if (!C.WEBHOOK_URL) raison = 'WEBHOOK_URL est vide dans config.js.';
+    else {
+      try {
+        const ctrl = new AbortController();
+        const minuteur = setTimeout(() => ctrl.abort(), 20000);
+        const r = await fetch(C.WEBHOOK_URL + '?action=stats&cle=' + encodeURIComponent(C.STATS_KEY) + '&_=' + Date.now(), { signal: ctrl.signal });
+        clearTimeout(minuteur);
+        d = await r.json();
+        if (!d || !d.ok) { raison = 'Le webhook a répondu une erreur' + (d && d.erreur ? ' (' + d.erreur + ')' : '') + '.'; d = null; }
+      } catch (e) { raison = 'Connexion au webhook impossible (' + (e.name === 'AbortError' ? 'délai dépassé' : e.message) + ').'; }
+    }
+    if (!d) { d = demo(); $('demo').hidden = false; $('demoTexte').textContent = raison + ' Les chiffres ci-dessous sont des données de démonstration, pas des vraies inscriptions.'; }
+    else $('demo').hidden = true;
+    rendre(d);
+    $('btnMaj').disabled = false;
+  }
+
+  /* Données de démonstration (stables, clairement fausses) */
+  function demo() {
+    const jours = [];
+    const base = new Date('2026-10-13T12:00:00+02:00');
+    const n = [182, 241, 268, 305, 297, 344, 412, 388, 176];
+    n.forEach((v, i) => { const x = new Date(base.getTime() + i * 864e5); jours.push([x.toISOString().slice(0, 10), v]); });
+    return {
+      ok: true, demo: true, maj: new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }),
+      objectifs: { inscrits: 3000, presents: 750 },
+      inscrits: n.reduce((a, b) => a + b, 0), inscrits_direct: 41,
+      par_jour: jours,
+      variantes: { a: { visiteurs: 5210, visites: 6120, inscrits: 1402 }, b: { visiteurs: 5180, visites: 6045, inscrits: 1211 } },
+      utm_source: [['facebook', 1820], ['instagram', 512], ['youtube', 164], ['email', 88], ['(aucune)', 29]],
+      utm_content: [['ads-103-frais', 690, 2410], ['ads-100-controle', 604, 2290], ['ads-112-banque', 402, 1650], ['reel-interets', 214, 980], ['ads-82', 96, 640], ['(aucun)', 607, 2410]],
+      whatsapp: { avec_tel: 1864, consentis: 1502 },
+      situation: [["Mon épargne dort sur des livrets ou comptes", 512], ["J'ai une assurance vie ou un conseiller à la banque", 398], ["J'investis déjà un peu seul", 301], ["J'ai déjà une stratégie mais je veux mieux faire", 104]],
+      qualif_repondu: 1391,
+      presents: [812, 694, 0], clics_sans_id: [23, 17, 0]
+    };
+  }
+
+  /* ---------- Rendu ---------- */
+  function rendre(d) {
+    const obj = (d.objectifs && d.objectifs.inscrits) || C.OBJECTIF_INSCRITS || 3000;
+    const objP = (d.objectifs && d.objectifs.presents) || C.OBJECTIF_PRESENTS || 750;
+    $('maj').textContent = d.maj || '·';
+
+    /* Inscrits vs objectif */
+    $('kInscrits').textContent = nf.format(d.inscrits || 0);
+    $('kObjectif').textContent = nf.format(obj);
+    const part = Math.min(1, (d.inscrits || 0) / obj);
+    $('jaugeFill').style.width = (part * 100) + '%';
+    $('jaugeInscrits').setAttribute('aria-label', pct((d.inscrits || 0) / obj, 0) + ' de l\'objectif');
+    const jours = d.par_jour || [];
+    const debutSoir1 = new Date(C.SESSIONS[0]).getTime();
+    const joursRestants = Math.max(0, Math.ceil((debutSoir1 - Date.now()) / 864e5));
+    const reste = Math.max(0, obj - (d.inscrits || 0));
+    $('kInscritsDet').textContent = pct((d.inscrits || 0) / obj, 0) + ' de l\'objectif · '
+      + (reste ? nf.format(reste) + ' à aller chercher' + (joursRestants ? ', soit ' + nf.format(Math.ceil(reste / joursRestants)) + ' par jour d\'ici le soir 1' : '') : 'objectif atteint')
+      + (d.inscrits_direct ? ' · dont ' + nf.format(d.inscrits_direct) + ' inscrits le soir même via la page du direct' : '');
+
+    /* WhatsApp */
+    const wa = d.whatsapp || {};
+    $('kWa').textContent = pct((wa.consentis || 0) / Math.max(1, d.inscrits || 0), 0);
+    $('kWaDet').textContent = nf.format(wa.consentis || 0) + ' accords sur ' + nf.format(d.inscrits || 0) + ' inscrits · ' + nf.format(wa.avec_tel || 0) + ' ont donné un numéro';
+
+    /* Taux global */
+    const va = (d.variantes && d.variantes.a) || {}, vb = (d.variantes && d.variantes.b) || {};
+    const vis = (va.visiteurs || 0) + (vb.visiteurs || 0), insV = (va.inscrits || 0) + (vb.inscrits || 0);
+    $('kTaux').textContent = pct(insV / Math.max(1, vis));
+    $('kTauxDet').textContent = nf.format(insV) + ' inscrits pour ' + nf.format(vis) + ' visiteurs uniques';
+
+    colonnes(jours);
+    presents(d.presents || [0, 0, 0], d.clics_sans_id || [], objP);
+    ab(va, vb);
+    barres($('situation'), d.situation || [], 'réponses');
+    $('qualifSous').textContent = 'Réponses facultatives de la page merci · ' + nf.format(d.qualif_repondu || 0) + ' inscrits ont répondu (' + pct((d.qualif_repondu || 0) / Math.max(1, d.inscrits || 0), 0) + ')';
+    barres($('sources'), d.utm_source || [], 'inscrits');
+    ads(d.utm_content || []);
+  }
+
+  function echelle(max) {
+    if (max <= 5) return 5;
+    const p = Math.pow(10, Math.floor(Math.log10(max)));
+    const pas = [1, 2, 2.5, 5, 10].map(x => x * p).find(x => max / x <= 5) || 10 * p;
+    return Math.ceil(max / pas) * pas;
+  }
+
+  function colonnes(jours) {
+    const box = $('parJour');
+    if (!jours.length) { box.innerHTML = '<p class="vide">Aucune inscription pour l\'instant.</p>'; return; }
+    const max = echelle(Math.max(...jours.map(j => j[1])));
+    const fmtJ = new Intl.DateTimeFormat('fr-FR', { weekday: 'short', day: 'numeric', timeZone: 'Europe/Paris' });
+    const fmtL = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Paris' });
+    const pics = Math.max(...jours.map(j => j[1]));
+    const ticks = [0, 0.25, 0.5, 0.75, 1].map(f => '<div style="bottom:' + (f * 100) + '%"><span>' + nf.format(Math.round(max * f)) + '</span></div>').join('');
+    const pas = jours.length > 16 ? Math.ceil(jours.length / 8) : 1;
+    box.innerHTML = '<div class="colonnes"><div class="axe-y">' + ticks + '</div>'
+      + jours.map((j, i) => {
+        const dt = new Date(j[0] + 'T12:00:00+02:00');
+        const h = (j[1] / max) * 100;
+        const lab = (i === jours.length - 1 || j[1] === pics) ? '<b style="bottom:calc(' + h + '% + 4px)">' + nf.format(j[1]) + '</b>' : '';
+        return '<div class="col"' + tipAttr('<b>' + esc(fmtL.format(dt)) + '</b><br>' + nf.format(j[1]) + ' inscrits') + '>'
+          + lab + '<i style="height:' + h + '%"></i>' + (i % pas === 0 ? '<em>' + esc(fmtJ.format(dt)) + '</em>' : '') + '</div>';
+      }).join('') + '</div>';
+  }
+
+  function barres(box, lignes, unite) {
+    if (!lignes.length) { box.innerHTML = '<p class="vide">Pas encore de données.</p>'; return; }
+    const total = lignes.reduce((a, l) => a + l[1], 0);
+    const max = Math.max(...lignes.map(l => l[1])) || 1;
+    box.innerHTML = lignes.slice(0, 8).map(l =>
+      '<div class="barre-l"' + tipAttr('<b>' + esc(l[0]) + '</b><br>' + nf.format(l[1]) + ' ' + unite + ' · ' + pct(l[1] / Math.max(1, total))) + '>'
+      + '<span class="nom" title="' + esc(l[0]) + '">' + esc(l[0]) + '</span>'
+      + '<span class="chiffre">' + nf.format(l[1]) + '<small>' + pct(l[1] / Math.max(1, total), 0) + '</small></span>'
+      + '<span class="piste"><i style="width:' + (l[1] / max * 100) + '%"></i></span></div>').join('');
+  }
+
+  function presents(p, sansId, objectif) {
+    const soirs = C.SESSIONS.map(s => new Date(s));
+    const max = Math.max(objectif * 1.25, ...p);
+    const fmt = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Paris' });
+    $('objPres').textContent = nf.format(objectif);
+    $('presents').innerHTML = [0, 1, 2].map(i => {
+      const v = p[i] || 0, futur = soirs[i] && soirs[i].getTime() > Date.now() && !v;
+      return '<div class="barre-l"' + tipAttr('<b>Soir ' + (i + 1) + '</b><br>' + nf.format(v) + ' présents · objectif ' + nf.format(objectif) + (sansId[i] ? '<br>' + nf.format(sansId[i]) + ' clics sans Id en plus' : '')) + '>'
+        + '<span class="nom">Soir ' + (i + 1) + ' · ' + esc(soirs[i] ? fmt.format(soirs[i]) : '') + '</span>'
+        + '<span class="chiffre">' + (futur ? '<small>à venir</small>' : nf.format(v) + '<small>' + pct(v / objectif, 0) + '</small>') + '</span>'
+        + '<span class="piste"><i style="width:' + (v / max * 100) + '%"></i><span class="objectif" style="left:' + (objectif / max * 100) + '%"></span></span></div>';
+    }).join('');
+  }
+
+  function ab(a, b) {
+    const V = C.VARIANTES;
+    const ta = (a.inscrits || 0) / Math.max(1, a.visiteurs || 0), tb = (b.inscrits || 0) / Math.max(1, b.visiteurs || 0);
+    const ligne = (k, x, t) => '<tr><td class="var-nom"><span class="cle" style="background:var(--v' + k + ')"></span><b>' + k.toUpperCase() + ' · ' + esc(V[k].nom) + '</b><small>' + esc(V[k].titre) + '</small></td>'
+      + '<td>' + nf.format(x.visiteurs || 0) + '</td><td>' + nf.format(x.inscrits || 0) + '</td><td><b>' + pct(t) + '</b></td></tr>';
+    $('ab').innerHTML = '<thead><tr><th>Variante</th><th>Visiteurs</th><th>Inscrits</th><th>Taux</th></tr></thead><tbody>' + ligne('a', a, ta) + ligne('b', b, tb) + '</tbody>';
+    const max = Math.max(ta, tb, 0.0001);
+    $('abBarres').innerHTML = [['a', ta], ['b', tb]].map(([k, t]) =>
+      '<div class="barre-l"' + tipAttr('<b>Variante ' + k.toUpperCase() + '</b><br>' + pct(t) + ' des visiteurs s\'inscrivent') + '><span class="nom">Variante ' + k.toUpperCase() + '</span><span class="chiffre">' + pct(t) + '</span>'
+      + '<span class="piste"><i class="' + k + '" style="width:' + (t / max * 100) + '%"></i></span></div>').join('');
+
+    /* Écart et test de deux proportions (z) */
+    const va = a.visiteurs || 0, vb = b.visiteurs || 0;
+    let txt;
+    if (va < 100 || vb < 100) txt = 'Pas encore assez de visiteurs pour conclure (au moins 100 par variante).';
+    else {
+      const pts = (tb - ta) * 100;
+      const rel = ta > 0 ? (tb - ta) / ta : 0;
+      const pm = ((a.inscrits || 0) + (b.inscrits || 0)) / (va + vb);
+      const se = Math.sqrt(pm * (1 - pm) * (1 / va + 1 / vb));
+      const z = se > 0 ? (tb - ta) / se : 0;
+      const meilleure = tb > ta ? 'B' : 'A';
+      const ecart = '<b>Écart : ' + (pts >= 0 ? '+' : '') + pts.toFixed(1).replace('.', ',') + ' pt</b> pour B (' + (rel >= 0 ? '+' : '') + pct(rel, 0) + ' en relatif). ';
+      txt = ecart + (Math.abs(z) >= 1.96
+        ? 'Différence <b>significative</b> à 95 % : la variante ' + meilleure + ' convertit mieux.'
+        : 'Pas encore significatif à 95 % (z = ' + z.toFixed(2).replace('.', ',') + ') : on laisse tourner.');
+    }
+    $('abVerdict').innerHTML = txt;
+  }
+
+  function ads(lignes) {
+    if (!lignes.length) { $('ads').innerHTML = '<tbody><tr><td class="vide">Pas encore de données.</td></tr></tbody>'; return; }
+    $('ads').innerHTML = '<thead><tr><th>utm_content</th><th>Inscrits</th><th>Visiteurs</th><th>Taux</th></tr></thead><tbody>'
+      + lignes.slice(0, 12).map(l => '<tr><td>' + esc(l[0]) + '</td><td><b>' + nf.format(l[1]) + '</b></td><td>' + nf.format(l[2] || 0) + '</td><td>' + (l[2] ? pct(l[1] / l[2]) : '·') + '</td></tr>').join('')
+      + '</tbody>';
+  }
+
+  /* ---------- Info-bulle au survol ---------- */
+  const tip = $('tip');
+  document.addEventListener('mousemove', ev => {
+    const el = ev.target.closest('[data-tip]');
+    if (!el) { tip.hidden = true; return; }
+    tip.innerHTML = el.getAttribute('data-tip');
+    tip.hidden = false;
+    const x = Math.min(ev.clientX + 14, innerWidth - tip.offsetWidth - 8);
+    const y = ev.clientY + 16 + tip.offsetHeight > innerHeight ? ev.clientY - tip.offsetHeight - 10 : ev.clientY + 16;
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  });
+  document.addEventListener('mouseleave', () => { tip.hidden = true; });
+})();
+</script>
+</body>
+</html>
