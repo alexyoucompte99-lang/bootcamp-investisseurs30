@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Le Bootcamp Investisseurs 3.0 | 3 soirées gratuites avec Thomas Mayol</title>
-<meta name="description" content="3 soirées en direct avec Thomas Mayol, du 20 au 22 octobre à 20h : où part votre argent, comment le faire travailler sans intermédiaire, et votre plan d'action. Gratuit, en ligne.">
+<meta name="description" content="3 soirées en direct avec Thomas Mayol et ses experts, du 20 au 22 octobre à 20h : votre stratégie d'investissement complète, de A à Z, sur 3 cas concrets. Gratuit, en ligne.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Le Bootcamp Investisseurs 3.0 : 3 soirées pour reprendre le contrôle de votre argent">
-<meta property="og:description" content="Gratuit, en ligne, avec Thomas Mayol. Sans banque, sans frais cachés, sur 3 cas réels.">
+<meta property="og:title" content="Le Bootcamp Investisseurs 3.0 : votre stratégie d'investissement de A à Z en 3 soirées">
+<meta property="og:description" content="Gratuit, en ligne, avec Thomas Mayol et ses experts. Les bonnes enveloppes, les bons placements, 3 cas concrets.">
 <meta property="og:image" content="https://alexyoucompte99-lang.github.io/bootcamp-investisseurs30/assets/og.jpg">
 <meta name="theme-color" content="#0f1927">
 <link rel="icon" type="image/svg+xml" href="assets/logo-i3.svg">
@@ -80,6 +80,15 @@
   .dates svg { flex: none; width: 40px; height: 40px; padding: 9px; border-radius: 12px; background: rgba(128, 185, 165, 0.14); stroke: var(--sauge); fill: none; stroke-width: 2; stroke-linecap: round; }
   .dates small { display: block; font-weight: 500; font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); }
 
+  /* Preuves sous le titre (mobile seulement : sur ordinateur, la barre blanche sous le hero) */
+  .preuve-hero { display: none; }
+  /* Programme court : remplace l'encart vidéo sur ordinateur tant que VIDEO_URL est vide */
+  .hero-soirs { list-style: none; display: grid; gap: 10px; max-width: 600px; }
+  .hero-soirs li { display: flex; align-items: center; gap: 14px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 14px; padding: 12px 16px; font-weight: 700; font-size: 0.98rem; line-height: 1.3; }
+  .hero-soirs li b { flex: none; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy); background: var(--sauge); border-radius: 100px; padding: 4px 10px; }
+  .hero-soirs li small { display: block; font-weight: 500; font-size: 0.78rem; color: rgba(255, 255, 255, 0.6); }
+  .hero-plus { margin-top: 14px; max-width: 600px; font-size: 0.86rem; color: rgba(255, 255, 255, 0.66); }
+
   /* Vidéo ou visuel de remplacement */
   .video { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; background: var(--navy-2); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6); }
   .video iframe, .video video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: #000; }
@@ -137,6 +146,7 @@
   .cta:hover svg { transform: translateX(3px); }
   .cta:disabled { opacity: 0.75; cursor: wait; transform: none; }
   .cta.plein { width: 100%; font-size: 1.1rem; padding: 19px 20px; margin-top: 6px; }
+  .a-deux { text-align: center; font-size: 0.82rem; font-weight: 600; color: rgba(255, 255, 255, 0.82); margin-top: 12px; line-height: 1.45; }
   .compteur { text-align: center; font-size: 0.8rem; color: rgba(255, 255, 255, 0.7); margin-top: 12px; }
   .compteur b { color: #fff; }
   .rgpd { font-size: 0.7rem; color: rgba(255, 255, 255, 0.5); line-height: 1.5; margin-top: 12px; }
@@ -164,7 +174,9 @@
   .soir-date { flex: none; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; background: var(--navy); border-radius: 100px; padding: 5px 12px; }
   .soir-quand { font-size: 0.8rem; font-weight: 700; color: var(--sauge-fonce); text-align: right; line-height: 1.3; }
   .soir h3 { font-weight: 900; font-size: 1.28rem; line-height: 1.22; letter-spacing: -0.015em; margin-bottom: 10px; }
-  .soir p { font-size: 0.93rem; color: var(--encre-douce); flex: 1; }
+  .soir p { font-size: 0.93rem; color: var(--encre-douce); }
+  .soir .cas { flex: 1; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--ligne); font-size: 0.86rem; line-height: 1.55; }
+  .soir .cas b { display: block; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sauge-fonce); margin-bottom: 3px; }
   .ressource { margin: 22px -26px 0; padding: 18px 26px 20px; background: var(--creme); border-top: 1px solid var(--ligne); display: flex; gap: 12px; align-items: flex-start; }
   .ressource svg { flex: none; width: 34px; height: 34px; padding: 7px; border-radius: 10px; background: var(--navy); stroke: var(--sauge); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .ressource small { display: block; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sauge-fonce); }
@@ -186,6 +198,13 @@
   .pq i svg { width: 16px; height: 16px; stroke: var(--sauge-fonce); fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
   .pq p { font-size: 0.95rem; color: var(--encre-douce); }
   .pq p strong { display: block; color: var(--encre); font-size: 1.02rem; margin-bottom: 2px; }
+  .cas-traites { max-width: 940px; margin: 16px auto 0; background: var(--navy); color: #fff; border-radius: 18px; padding: 22px 24px; }
+  .cas-traites small { display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sauge); margin-bottom: 10px; }
+  .cas-traites ul { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .cas-traites li { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 12px 14px; font-weight: 700; font-size: 0.95rem; line-height: 1.35; }
+  .cas-traites li span { display: block; font-weight: 600; font-size: 0.72rem; color: var(--sauge); letter-spacing: 0.08em; text-transform: uppercase; }
+  .cas-traites p { margin-top: 12px; font-size: 0.86rem; color: rgba(255, 255, 255, 0.7); }
+  .pas-pour-vous { max-width: 940px; margin: 18px auto 0; text-align: center; font-weight: 600; font-size: 0.95rem; color: var(--encre-douce); }
 
   /* Thomas */
   .thomas { display: grid; grid-template-columns: 290px 1fr; gap: 44px; align-items: center; background: var(--blanc); border: 1px solid var(--ligne); border-radius: 24px; padding: 40px 44px 40px 30px; }
@@ -199,6 +218,14 @@
   .thomas .mot small { display: block; margin-top: 6px; font-size: 0.8rem; font-weight: 700; color: var(--sauge-fonce); }
   .creds { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
   .creds span { font-size: 0.74rem; font-weight: 700; color: var(--encre); background: var(--creme); border: 1px solid var(--ligne); border-radius: 100px; padding: 5px 12px; }
+
+  .experts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px; }
+  .expert { display: flex; align-items: center; gap: 18px; background: var(--blanc); border: 1px solid var(--ligne); border-radius: 20px; padding: 20px 22px; }
+  .expert img { flex: none; width: 92px; height: 92px; border-radius: 16px; object-fit: cover; background: #34383f; }
+  .expert b { display: block; font-weight: 900; font-size: 1.12rem; line-height: 1.25; letter-spacing: -0.01em; }
+  .expert small { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sauge-fonce); margin-top: 4px; }
+  .membres { display: flex; gap: 14px; align-items: center; margin-top: 16px; background: var(--sauge-voile); border: 1px solid rgba(73, 122, 102, 0.25); border-radius: 16px; padding: 16px 20px; font-size: 0.95rem; }
+  .membres svg { flex: none; width: 26px; height: 26px; stroke: var(--sauge-fonce); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
   /* Avis */
   .avis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; max-width: 960px; margin: 0 auto; }
@@ -268,17 +295,28 @@
 
   @media (max-width: 960px) {
     .hero-grille { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    /* Mobile : titre, preuves, dates, puis le formulaire tout de suite ; la vidéo passe après */
+    .hero-col { display: contents; }
+    .hero-grille > .carte { order: 1; }
+    .hero-col > .video { order: 2; margin-top: 22px; }
+    .hero-soirs, .hero-plus { display: none; }
+    .preuve { display: none; }
+    .preuve-hero { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0 0 16px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; background: rgba(255, 255, 255, 0.04); }
+    .preuve-hero span { text-align: center; padding: 10px 4px; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255, 255, 255, 0.62); line-height: 1.3; }
+    .preuve-hero span + span { border-left: 1px solid rgba(255, 255, 255, 0.1); }
+    .preuve-hero b { display: block; font-weight: 900; font-size: 1.05rem; letter-spacing: -0.01em; color: #fff; text-transform: none; }
+    .preuve-hero b em { font-style: normal; color: var(--sauge); }
     .hero { padding: 14px 0 44px; }
     .tete { padding: 16px 0 0; }
     .tete img { height: 32px; }
     .tete-info { display: none; }
     .badge { margin-bottom: 16px; font-size: 0.7rem; padding: 6px 13px 6px 11px; }
     .hero h1 { font-size: clamp(1.8rem, 7.4vw, 2.5rem); margin-bottom: 14px; }
-    .sous-titre { font-size: 0.97rem; }
-    .dates { margin: 18px 0 20px; font-size: 0.95rem; }
+    .sous-titre { font-size: 0.97rem; margin-bottom: 16px; }
+    .dates { margin: 0; font-size: 0.95rem; }
     .dates svg { width: 36px; height: 36px; padding: 8px; }
     .carte { margin-top: 22px; padding: 22px 18px 20px; border-radius: 18px; }
-    .soirs, .avis, .pourqui { grid-template-columns: minmax(0, 1fr); }
+    .soirs, .avis, .pourqui, .experts, .cas-traites ul { grid-template-columns: minmax(0, 1fr); }
     .cadeau { grid-template-columns: auto 1fr; padding: 22px; }
     .cadeau .cta { grid-column: 1 / -1; width: 100%; }
     .thomas { grid-template-columns: minmax(0, 1fr); text-align: center; padding: 30px 22px; gap: 22px; }
@@ -304,6 +342,8 @@
     .lecture { font-size: 0.72rem; }
     .lecture span { width: 38px; height: 38px; }
     .pq { padding: 18px; }
+    .expert { padding: 16px; gap: 14px; }
+    .expert img { width: 76px; height: 76px; }
     .avis-carte { padding: 22px 20px 18px; }
     .faq details { padding: 0 16px; }
     .faq summary { font-size: 0.95rem; }
@@ -324,8 +364,8 @@
   <section class="hero" data-sec="hero">
     <div class="wrap hero-grille">
       <div class="hero-col">
-        <p class="badge"><span class="point"></span>Gratuit · en ligne · 3 soirs</p>
-        <h1 id="titre">Reprenez le contrôle de votre argent en 3 soirées.</h1>
+        <p class="badge"><span class="point"></span>Gratuit · en ligne · 3 soirs en direct</p>
+        <h1 id="titre">Votre stratégie d'investissement complète, de A à Z, en 3 soirées.</h1>
         <p class="sous-titre" id="sousTitre"></p>
         <script>
           (function () {
@@ -341,11 +381,15 @@
             document.getElementById('sousTitre').textContent = V.sousTitre;
           })();
         </script>
+        <p class="preuve-hero" aria-label="Investisseurs 3.0 en chiffres"><span><b>600&nbsp;000</b>Abonnés</span><span><b><em>+</em>700</b>Investisseurs accompagnés</span><span><b>4,9<em>/5</em></b>Trustpilot</span></p>
         <p class="dates">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
           <span><span id="datesTexte">Mardi 20, mercredi 21, jeudi 22 octobre · 20h</span><small>Heure de Paris · 2 heures par soir · en direct</small></span>
         </p>
-        <div class="video" id="video" data-sec="video"></div>
+        <!-- Encart vidéo : masqué tant que CONFIG.VIDEO_URL est vide ; le programme court le remplace sur ordinateur -->
+        <div class="video" id="video" data-sec="video" hidden></div>
+        <ul class="hero-soirs" id="heroSoirs" hidden></ul>
+        <p class="hero-plus" id="heroPlus" hidden>Avec Thomas Mayol, un ingénieur patrimonial et un gestionnaire de fortune. Des membres du Club témoignent en direct chaque soir.</p>
       </div>
 
       <div class="carte" id="inscription" data-sec="form">
@@ -362,7 +406,7 @@
 
         <form id="form" novalidate>
           <h2>Réservez votre place</h2>
-          <p class="intro">Votre lien personnel arrive par e-mail. <b>Offert dès l'inscription</b> : le Simulateur d'intérêts composés.</p>
+          <p class="intro">Votre lien personnel arrive par e-mail, avec un rappel avant chaque soir. <b>Chaque soir, une ressource remise aux présents.</b></p>
           <p class="deja" id="deja" hidden></p>
 
           <div class="champ" id="champ-prenom">
@@ -379,11 +423,12 @@
             <label class="lib" for="tel">Téléphone WhatsApp <small>· facultatif</small></label>
             <input type="tel" id="tel" name="tel" autocomplete="tel" inputmode="tel" placeholder="06 12 34 56 78" enterkeyhint="done" maxlength="25">
             <p class="err">Ce numéro ne semble pas valide.</p>
-            <p class="aide">Pour recevoir votre lien et un rappel 15 minutes avant chaque soir.</p>
+            <p class="aide">Pour recevoir le lien du direct 15 minutes avant et les 2 ressources réservées au groupe WhatsApp.</p>
             <label class="consent" id="blocConsent" hidden><input type="checkbox" id="consent"><span>J'accepte d'être contacté(e) sur WhatsApp et par téléphone par Investisseurs 3.0 au sujet du Bootcamp : rappels, ressources et appel stratégie.</span></label>
           </div>
 
           <button class="cta plein" id="btn" type="submit">Je réserve ma place <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+          <p class="a-deux">Vous gérez votre argent à deux ? Inscrivez aussi votre conjoint.</p>
           <p class="compteur" id="compteur" hidden><b id="compteurN">0</b> personnes déjà inscrites</p>
           <p class="rgpd">En validant, vous acceptez qu'Investisseurs 3.0 utilise ces informations pour vous envoyer votre lien, les rappels, les replays et ses contenus sur l'investissement. Désinscription en un clic. <a href="#mentions" data-ouvre-legal>Confidentialité</a>.</p>
         </form>
@@ -406,14 +451,14 @@
   <div class="wrap">
     <p class="surtitre">Le programme</p>
     <h2 class="titre-sec">Ce que vous allez vivre</h2>
-    <p class="sous-sec">Chaque soir : une thématique traitée à fond, un cas réel avec ses chiffres, et vos questions en direct. Vous repartez avec une ressource pour passer à l'action dès le lendemain.</p>
+    <p class="sous-sec">Soir 1, on pose la stratégie. Soir 2, on choisit les placements. Soir 3, on assemble tout sur 3 cas concrets. Chaque soir : un cas réel décortiqué avec ses chiffres, vos questions en direct, et une ressource remise aux présents.</p>
     <div class="soirs" id="soirs"></div>
     <div class="cadeau">
-      <div class="cadeau-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
+      <div class="cadeau-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg></div>
       <div>
-        <small>Dès votre inscription</small>
-        <b>Le Simulateur d'intérêts composés</b>
-        <p>Ce que vous coûte une année d'attente, calculé sur vos propres chiffres. Offert dans le groupe WhatsApp du Bootcamp.</p>
+        <small>Réservé au groupe WhatsApp du Bootcamp</small>
+        <b id="waTitre">2 ressources en plus</b>
+        <p id="waTexte">Le lien du groupe vous est donné juste après votre inscription.</p>
       </div>
       <a class="cta vers-form" href="#inscription">Je réserve ma place</a>
     </div>
@@ -425,30 +470,54 @@
   <div class="wrap">
     <p class="surtitre">Pour qui</p>
     <h2 class="titre-sec">Ce Bootcamp est fait pour vous si</h2>
-    <p class="sous-sec">Pas besoin d'être un expert. Il faut seulement avoir envie que votre argent travaille enfin pour vous.</p>
+    <p class="sous-sec">Pas besoin d'être un expert. Il faut seulement vouloir une vraie stratégie d'investissement, que vous gérez ensuite en totale autonomie.</p>
     <div class="pourqui">
       <div class="pq"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><p><strong>Votre épargne dort</strong>Sur des livrets, un fonds euros ou l'assurance vie de votre banque, et vous savez qu'elle perd de la valeur chaque année.</p></div>
       <div class="pq"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><p><strong>Vous vous méfiez de votre banque</strong>Et des frais que personne ne prend le temps de vous expliquer.</p></div>
       <div class="pq"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><p><strong>Vous voulez comprendre et décider</strong>Savoir ce que vous faites de votre argent, et ne plus dépendre de personne pour le faire.</p></div>
-      <div class="pq"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><p><strong>Il vous manque le temps et la méthode</strong>Vous ne voulez pas tout apprendre seul, ni risquer de vous tromper.</p></div>
+      <div class="pq"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><p><strong>Il vous manque le temps et la méthode</strong>Vous investissez peut-être déjà un peu, sans vraie stratégie. Vous ne voulez pas tout apprendre seul, ni risquer de vous tromper.</p></div>
     </div>
+    <div class="cas-traites">
+      <small>Les 3 cas traités en direct le soir 3</small>
+      <ul>
+        <li><span>Cas 1</span>500 € par mois, sans capital</li>
+        <li><span>Cas 2</span>300 € par mois et 20 000 €</li>
+        <li><span>Cas 3</span>100 000 € et plus à investir</li>
+      </ul>
+      <p>Trois points de départ, une même méthode en 5 étapes. Aucun montant n'est demandé pour participer.</p>
+    </div>
+    <p class="pas-pour-vous">Ce n'est pas pour vous si vous cherchez un placement miracle.</p>
   </div>
 </section>
 
 <!-- ============================ THOMAS ============================ -->
 <section class="bloc" id="thomas" data-sec="thomas">
   <div class="wrap etroit">
-    <p class="surtitre">Votre hôte</p>
+    <p class="surtitre">Vos intervenants</p>
+    <h2 class="titre-sec">Thomas Mayol et ses experts</h2>
+    <p class="sous-sec">Une stratégie construite comme le font les professionnels : Thomas Mayol, un ingénieur patrimonial et un gestionnaire de fortune.</p>
     <div class="thomas">
       <div class="thomas-photo"><img src="assets/thomas-portrait.jpg" alt="Thomas Mayol" width="400" height="400" loading="lazy"></div>
       <div>
         <h2>Thomas Mayol</h2>
         <p class="role">Fondateur d'Investisseurs 3.0</p>
         <p>Diplômé d'emlyon, passé par la Banque de France et PwC, titulaire de la certification professionnelle AMF. Plus de 600&nbsp;000 personnes suivent ses contenus sur l'investissement, et plus de 700 investisseurs ont construit leur stratégie avec lui et son équipe.</p>
-        <p class="mot">« Pendant trois soirs, je vous montre ce que je fais avec les investisseurs que j'accompagne : regarder où part l'argent, construire une stratégie simple, et passer à l'action. Des cas réels, des chiffres, zéro jargon. »<small>Thomas</small></p>
+        <p class="mot">« Le Bootcamp, c'est exactement ce qu'on fait avec un membre du Club pendant 3 mois, mais en 3 soirs, en collectif et en accéléré. »<small>Thomas</small></p>
         <div class="creds"><span>emlyon</span><span>Banque de France</span><span>PwC</span><span>Certification AMF</span></div>
       </div>
     </div>
+    <!-- À VALIDER PAR THOMAS : noms, métiers exacts (qui est l'ingénieur patrimonial, qui est le gestionnaire de fortune), et accord de Ghislain et Benjamin pour apparaître avec leur photo. Aucun nom de société ne doit être ajouté ici. -->
+    <div class="experts">
+      <div class="expert">
+        <img src="assets/ghislain.jpg" alt="Ghislain Cayla" width="400" height="400" loading="lazy">
+        <div><b>Ghislain Cayla</b><small>Ingénieur patrimonial</small></div>
+      </div>
+      <div class="expert">
+        <img src="assets/benjamin.jpg" alt="Benjamin Forget" width="400" height="400" loading="lazy">
+        <div><b>Benjamin Forget</b><small>Gestionnaire de fortune</small></div>
+      </div>
+    </div>
+    <p class="membres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span><strong>Des membres du Club témoignent en direct chaque soir</strong> : leur situation de départ, ce qu'ils ont mis en place, et ce que ça a changé.</span></p>
   </div>
 </section>
 
@@ -491,23 +560,23 @@
     <div class="faq">
       <details>
         <summary>C'est vraiment gratuit ?</summary>
-        <p>Oui. Les 3 soirées sont offertes, en ligne, sans carte bancaire et sans engagement. Les ressources de chaque soir aussi.</p>
+        <p>Oui. Les 3 soirées sont offertes, en ligne, sans carte bancaire et sans engagement. Les ressources remises aux présents aussi.</p>
       </details>
       <details>
         <summary>Y aura-t-il un replay ?</summary>
-        <p>Oui, pour les inscrits, jusqu'au jeudi 29 octobre à minuit. Le direct garde deux avantages : vos questions traitées en direct, et la priorité sur les appels stratégie ouverts à la fin du soir 3.</p>
+        <p>Oui, pour les inscrits, le lendemain de chaque soir et jusqu'au <span class="js-fermeture">jeudi 29 octobre à 23h59</span>. Le direct garde trois avantages : la ressource du soir n'est remise qu'aux présents, vos questions sont traitées en direct, et des créneaux d'appel s'ouvrent chaque soir en nombre limité.</p>
       </details>
       <details>
         <summary>Faut-il un gros capital pour participer ?</summary>
-        <p>Non. La méthode vaut quel que soit votre point de départ : savoir où part votre argent, le faire travailler avec une stratégie simple, et poser un plan. C'est justement quand on commence qu'on évite les erreurs qui coûtent cher.</p>
+        <p>Non. Le soir 3, trois stratégies complètes sont construites en direct, à trois points de départ : 500 € par mois sans capital, 300 € par mois et 20 000 €, 100 000 € et plus à investir. La méthode est la même, et c'est justement quand on commence qu'on évite les erreurs qui coûtent cher.</p>
       </details>
       <details>
         <summary>Faut-il être là les 3 soirs ?</summary>
-        <p>C'est l'idéal : chaque soir s'appuie sur le précédent. Si vous en manquez un, le replay et la ressource du soir vous attendent le lendemain, et vous rattrapez avant le soir suivant.</p>
+        <p>C'est l'idéal : on pose la stratégie le soir 1, on choisit les placements le soir 2, on assemble tout le soir 3. Si vous en manquez un, le replay vous attend le lendemain et vous rattrapez avant le soir suivant. La ressource du soir, elle, n'est remise qu'aux présents.</p>
       </details>
       <details>
         <summary>Allez-vous me vendre quelque chose ?</summary>
-        <p>Pendant les 3 soirs : de la méthode, des cas réels et vos questions. À la fin du soir 3, celles et ceux qui veulent être accompagnés pour mettre leur plan en place pourront réserver un appel stratégie de 45 minutes, offert. Rien n'est obligatoire : vous repartez avec la méthode et les ressources dans tous les cas.</p>
+        <p>Pendant les 3 soirs : de la méthode, des cas et vos questions. À l'occasion du Bootcamp, une cohorte de 50 places s'ouvre dans le Club Investisseurs 3.0, qui est payant. 50, c'est ce que les coachs peuvent accompagner correctement en 3 mois. Celles et ceux qui veulent être accompagnés sur leur propre situation peuvent réserver un appel de 45 minutes, offert, dès le soir 1. Les réservations ferment quand les 50 places sont prises, et au plus tard le <span class="js-fermeture">jeudi 29 octobre à 23h59</span>. Rien n'est obligatoire : vous repartez avec la méthode dans tous les cas.<span id="faqPlaces"></span></p>
       </details>
     </div>
   </div>
@@ -516,8 +585,8 @@
 <!-- ============================ BANDE FINALE ============================ -->
 <section class="finale" data-sec="finale">
   <div class="wrap">
-    <h2><span id="finaleDate">Mardi 20 octobre</span>, 20h. <em>Trois soirées pour reprendre la main sur votre argent.</em></h2>
-    <p>Gratuit, en ligne, avec la ressource de chaque soir. Il vous reste à réserver votre place.</p>
+    <h2><span id="finaleDate">Mardi 20 octobre</span>, 20h. <em>Trois soirées pour construire votre stratégie d'investissement, de A à Z.</em></h2>
+    <p>Gratuit, en ligne, avec Thomas Mayol et ses experts. Il vous reste à réserver votre place.</p>
     <a class="cta vers-form" href="#inscription">Je réserve ma place <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     <p class="note">Gratuit · En ligne · Sans engagement</p>
   </div>
@@ -567,7 +636,7 @@
     <p>Trois ans après notre dernier échange, puis suppression. Les mesures d'audience sont conservées 25 mois. Une demande de suppression est traitée sous 30 jours.</p>
     <h3>Vos droits</h3>
     <p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité. Écrivez à <a href="mailto:contact@academiedesinvestisseurs.com">contact@academiedesinvestisseurs.com</a> : réponse sous un mois. Vous pouvez aussi saisir la CNIL : <a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>, 3 place de Fontenoy, 75007 Paris.</p>
-    <p style="margin-top:24px;font-size:0.78rem;">Dernière mise à jour : 15 septembre 2026.</p>
+    <p style="margin-top:24px;font-size:0.78rem;">Dernière mise à jour : 18 septembre 2026.</p>
   </div>
 </div>
 
@@ -622,16 +691,28 @@
     $('soirs').innerHTML = SOIRS.map(s =>
       '<article class="soir"><div class="soir-tete"><span class="soir-date">Soir ' + s.n + '</span>'
       + '<span class="soir-quand">' + s.dateCap + ' · ' + s.heure + '</span></div>'
-      + '<h3></h3><p></p>'
-      + '<div class="ressource">' + ico + '<div><small>Ressource du soir</small><b></b><span></span></div></div></article>'
+      + '<h3></h3><p class="promesse"></p><p class="cas"><b>Le cas du soir</b><span></span></p>'
+      + '<div class="ressource">' + ico + '<div><small>Remis aux présents, en direct</small><b></b><span></span></div></div></article>'
     ).join('');
     $('soirs').querySelectorAll('.soir').forEach((el, i) => {
       const s = SOIRS[i];
       el.querySelector('h3').textContent = s.titre;
-      el.querySelector('p').textContent = s.promesse;
+      el.querySelector('.promesse').textContent = s.promesse;
+      el.querySelector('.cas span').textContent = s.cas || '';
+      if (!s.cas) el.querySelector('.cas').hidden = true;
       el.querySelector('.ressource b').textContent = s.ressource;
       el.querySelector('.ressource span').textContent = s.ressourceDetail || '';
     });
+    /* Ressources réservées au groupe WhatsApp (SOIRS[].ressourceWa) */
+    const wa = SOIRS.map(s => s.ressourceWa).filter(Boolean);
+    if (wa.length) {
+      const min = t => t.charAt(0).toLowerCase() + t.slice(1);
+      $('waTitre').textContent = wa.length + (wa.length > 1 ? ' ressources en plus' : ' ressource en plus');
+      $('waTexte').textContent = wa.map((t, i) => (i ? min(t) : t)).join(' et ') + '. Le lien du groupe vous est donné juste après votre inscription.';
+    }
+    /* Date de fermeture (DATE_FERMETURE) et places restantes (seulement si le chiffre est renseigné, donc réel) */
+    document.querySelectorAll('.js-fermeture').forEach(el => { el.textContent = B.fermeture().texte; });
+    if (B.placesTexte()) $('faqPlaces').textContent = ' ' + B.placesTexte();
   })();
 
   /* ---------- Vidéo de présentation, ou visuel de remplacement ---------- */
@@ -646,8 +727,18 @@
       + '<img src="assets/thomas.png" alt="" width="968" height="862" fetchpriority="high">'
       + (lecture ? '<span class="lecture"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="#0f1927" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>Regarder la présentation</span>' : '<span class="visuel-nom">Avec Thomas Mayol</span>');
     if (!url) {
-      box.innerHTML = '<div class="visuel" role="img" aria-label="Le Bootcamp Investisseurs 3.0 avec Thomas Mayol">' + visuel(false) + '</div>';
-    } else if (B.estFichierVideo(url)) {
+      /* Pas de vidéo : encart masqué, programme court à la place (ordinateur seulement, voir CSS) */
+      const ul = $('heroSoirs');
+      SOIRS.forEach(s => {
+        const li = document.createElement('li'), b = document.createElement('b'), d = document.createElement('div'), sm = document.createElement('small');
+        b.textContent = 'Soir ' + s.n; sm.textContent = s.dateCap + ' · ' + s.heure;
+        d.append(s.titre); d.appendChild(sm); li.append(b, d); ul.appendChild(li);
+      });
+      ul.hidden = false; $('heroPlus').hidden = false;
+      return;
+    }
+    box.hidden = false;
+    if (B.estFichierVideo(url)) {
       box.innerHTML = '<video controls playsinline preload="metadata" src=""></video>';
       box.querySelector('video').src = url;
       box.querySelector('video').addEventListener('play', () => PIXEL.evt('Bootcamp_Video', false, { variante: V }), { once: true });
@@ -704,7 +795,7 @@
         bloc.classList.add('direct');
         lib.innerHTML = '';
         lib.append('Le Bootcamp est terminé');
-        const b = document.createElement('b'); b.textContent = 'Replays pour les inscrits jusqu\'au 29 octobre'; lib.appendChild(b);
+        const b = document.createElement('b'); b.textContent = 'Replays pour les inscrits jusqu\'au ' + B.fermeture().texte.replace(/ à .*$/, ''); lib.appendChild(b);
         return;
       }
       bloc.classList.remove('direct');

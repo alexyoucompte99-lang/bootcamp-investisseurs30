@@ -47,10 +47,6 @@
 
   .video { position: relative; margin-top: 16px; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: var(--navy); }
   .video iframe, .video video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-  .bientot { margin-top: 16px; display: flex; align-items: center; gap: 16px; background: var(--creme); border: 1px dashed rgba(15, 25, 39, 0.2); border-radius: 14px; padding: 16px 18px; }
-  .bientot img { flex: none; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
-  .bientot b { display: block; font-size: 0.95rem; }
-  .bientot span { display: block; font-size: 0.85rem; color: var(--encre-douce); line-height: 1.45; }
 
   .avantages { list-style: none; display: grid; gap: 8px; margin: 14px 0 18px; }
   .avantages li { display: flex; gap: 10px; align-items: flex-start; font-size: 0.92rem; color: var(--encre-douce); line-height: 1.5; }
@@ -104,6 +100,8 @@
   .consignes li i svg { width: 18px; height: 18px; stroke: var(--sauge-fonce); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .consignes li strong { display: block; color: var(--encre); }
 
+  .appels { margin-top: 16px; padding: 12px 14px; border-radius: 12px; background: var(--sauge-voile); font-size: 0.9rem; font-weight: 600; color: var(--encre); line-height: 1.5; }
+
   footer { text-align: center; padding: 26px 0 40px; color: var(--encre-douce); font-size: 0.78rem; line-height: 1.6; }
   footer a { color: var(--sauge-fonce); font-weight: 600; }
   footer p + p { margin-top: 8px; }
@@ -129,8 +127,8 @@
     <img class="logo" src="assets/logo-i3-blanc.svg" alt="Investisseurs 3.0" width="96" height="34">
     <svg class="sceau" viewBox="0 0 64 64" aria-hidden="true"><circle pathLength="100" cx="32" cy="32" r="28"/><path pathLength="100" d="M21 33 L29 41 L44 25"/></svg>
     <h1 id="titre">C'est confirmé.</h1>
-    <p>Votre place au Bootcamp Investisseurs 3.0 est réservée. Rendez-vous <strong id="rdv">mardi 20 octobre à 20h</strong>. Votre lien personnel arrive aussi par e-mail.</p>
-    <span class="progres">3 étapes · 2 minutes</span>
+    <p>Votre place au Bootcamp Investisseurs 3.0 est réservée. Rendez-vous <strong id="rdv">mardi 20 octobre à 20h</strong>. Votre lien personnel arrive aussi par e-mail.<span id="waParMail" hidden> Le lien du groupe WhatsApp du Bootcamp aussi.</span></p>
+    <span class="progres" id="progres">3 étapes · 2 minutes</span>
   </div>
 </div>
 
@@ -138,35 +136,32 @@
   <div class="wrap">
 
     <!-- 1. Vidéo -->
-    <section class="etape">
+    <!-- Masquée tant que CONFIG.VIDEO_MERCI_URL est vide (les étapes visibles sont renumérotées) -->
+    <section class="etape" id="etapeVideo" hidden>
       <span class="num">1</span>
       <h2>Regardez cette vidéo de 60 secondes</h2>
       <p>Thomas vous explique comment tirer le maximum des 3 soirées.</p>
-      <div class="video" id="video" hidden></div>
-      <div class="bientot" id="bientot">
-        <img src="assets/thomas-portrait.jpg" alt="" width="56" height="56">
-        <div><b>Vidéo bientôt disponible</b><span>Le message de Thomas arrive ici très vite. Passez à l'étape 2 en attendant.</span></div>
-      </div>
+      <div class="video" id="video"></div>
     </section>
 
     <!-- 2. WhatsApp -->
-    <section class="etape">
+    <!-- Masquée tant que CONFIG.GROUPES_WHATSAPP est vide -->
+    <section class="etape" id="etapeWa" hidden>
       <span class="num">2</span>
       <h2>Rejoignez le groupe WhatsApp du Bootcamp</h2>
       <ul class="avantages">
-        <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><strong>Votre cadeau tout de suite</strong> : le Simulateur d'intérêts composés, pour voir ce que coûte une année d'attente.</span></li>
-        <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><strong>Les rappels</strong> avant chaque soir, pour ne pas rater le début.</span></li>
-        <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><strong>Les ressources de chaque soir</strong> : le Détecteur de frais, le Plan de répartition et le Plan 90 jours.</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><strong id="waRessourcesTitre">2 ressources réservées au groupe</strong><span id="waRessources"> : la liste des meilleures plateformes par enveloppe et la checklist d'une bonne affaire en immobilier.</span></span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><strong>Le lien du direct 15 minutes avant</strong> chaque soir, pour ne pas rater le début.</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><strong>Les rappels et les replays</strong>, au même endroit que vos autres messages.</span></li>
       </ul>
-      <a class="btn-wa" id="btnWa" href="#" target="_blank" rel="noopener" hidden>
+      <a class="btn-wa" id="btnWa" href="#" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.05 0C5.5 0 .2 5.3.2 11.85c0 2.1.55 4.15 1.6 5.95L0 24l6.35-1.65a11.9 11.9 0 0 0 5.7 1.45c6.55 0 11.85-5.3 11.85-11.85 0-3.15-1.25-6.15-3.4-8.45zm-8.45 18.25c-1.8 0-3.55-.5-5.05-1.4l-.35-.2-3.75 1 1-3.65-.25-.4a9.8 9.8 0 0 1-1.5-5.25c0-5.45 4.4-9.85 9.85-9.85 2.65 0 5.1 1.05 6.95 2.9a9.8 9.8 0 0 1 2.9 6.95c0 5.45-4.45 9.9-9.8 9.9zm5.4-7.35c-.3-.15-1.75-.85-2.05-.95-.25-.1-.45-.15-.65.15-.2.3-.75.95-.9 1.15-.15.2-.35.2-.65.05-.3-.15-1.25-.45-2.4-1.45-.9-.8-1.5-1.75-1.65-2.05-.15-.3 0-.45.15-.6.15-.15.3-.35.45-.5.15-.15.2-.3.3-.5.1-.2.05-.35 0-.5-.05-.15-.65-1.6-.9-2.2-.25-.55-.5-.5-.65-.5h-.55c-.2 0-.5.05-.8.35-.25.3-1.05 1-1.05 2.45s1.05 2.85 1.2 3.05c.15.2 2.1 3.2 5.1 4.5.7.3 1.25.5 1.7.65.7.2 1.35.2 1.85.1.55-.1 1.75-.7 2-1.4.25-.7.25-1.25.15-1.4-.05-.15-.25-.2-.55-.35z"/></svg>
         Rejoindre le groupe WhatsApp
       </a>
-      <p class="note" id="waBientot">Le lien du groupe WhatsApp arrive très vite par e-mail.</p>
     </section>
 
     <!-- 3. Agenda -->
-    <section class="etape">
+    <section class="etape" id="etapeAgenda">
       <span class="num">3</span>
       <h2>Bloquez les 3 soirées</h2>
       <p>Un clic par soir dans Google Agenda, ou les 3 d'un coup dans votre calendrier. Votre lien personnel est dans chaque invitation.</p>
@@ -213,6 +208,7 @@
         <li><i><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></i><span><strong>De quoi noter</strong>Chaque soir se termine par des actions concrètes à appliquer à votre situation.</span></li>
         <li><i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></i><span><strong>Soyez là à 20h pile</strong>Votre lien personnel s'active dès 19h45. On commence à l'heure.</span></li>
       </ul>
+      <p class="appels">Des créneaux d'appel s'ouvrent chaque soir, en nombre limité, dès la fin du soir 1.</p>
     </section>
   </div>
 </main>
@@ -254,19 +250,31 @@
     const box = $('video');
     if (B.estFichierVideo(url)) { const v = document.createElement('video'); v.controls = true; v.playsInline = true; v.preload = 'metadata'; v.src = url; box.appendChild(v); }
     else { const f = document.createElement('iframe'); f.src = B.urlEmbed(url, false); f.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture'; f.allowFullscreen = true; f.title = 'Le message de Thomas'; box.appendChild(f); }
-    box.hidden = false; $('bientot').hidden = true;
+    $('etapeVideo').hidden = false;
   }
 
   /* 2. WhatsApp : un groupe tiré au hasard, toujours le même pour une même personne */
   const groupes = (C.GROUPES_WHATSAPP || []).filter(Boolean);
+  if (!groupes.length) $('waParMail').hidden = false;
   if (groupes.length) {
     let n = -1;
     try { n = +localStorage.getItem('bootcamp-groupe'); if (!(n >= 0 && n < groupes.length) || localStorage.getItem('bootcamp-groupe') === null) { n = Math.floor(Math.random() * groupes.length); localStorage.setItem('bootcamp-groupe', n); } }
     catch (e) { n = Math.floor(Math.random() * groupes.length); }
     $('btnWa').href = groupes[n];
-    $('btnWa').hidden = false;
-    $('waBientot').hidden = true;
+    $('etapeWa').hidden = false;
+    /* Ressources réservées au groupe : lues dans SOIRS[].ressourceWa */
+    const wa = SOIRS.map(s => s.ressourceWa).filter(Boolean);
+    if (wa.length) {
+      const min = x => x.charAt(0).toLowerCase() + x.slice(1);
+      $('waRessourcesTitre').textContent = wa.length + (wa.length > 1 ? ' ressources réservées au groupe' : ' ressource réservée au groupe');
+      $('waRessources').textContent = ' : ' + wa.map(min).join(' et ') + '.';
+    }
   }
+
+  /* Étapes visibles renumérotées (vidéo et WhatsApp masquées tant que leur lien est vide) */
+  const visibles = Array.from(document.querySelectorAll('main .etape')).filter(el => !el.hidden);
+  visibles.forEach((el, i) => { el.querySelector('.num').textContent = i + 1; });
+  $('progres').textContent = visibles.length > 1 ? visibles.length + ' étapes · 2 minutes' : '1 étape · 1 minute';
 
   /* 3. Agenda : un bouton Google par soir + un .ics avec les 3 */
   const ico = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';

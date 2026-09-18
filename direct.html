@@ -23,6 +23,8 @@
   au webhook (2,5 s maximum), puis ouvre LIVE_URLS[soir]. L'accès n'est jamais
   bloqué : webhook muet ou en erreur = redirection quand même.
   Avec ?i=<Id> la page se comporte comme rejoindre.html (pas de formulaire).
+  De la fin du soir 1 (20/10 22h00) à DATE_FERMETURE : bouton de réservation de l'appel
+  stratégie, entre les soirs comme après le soir 3.
   Test : ?maintenant=2026-10-21T19:50:00%2B02:00 (marqué test).
 -->
 <style>
@@ -50,6 +52,11 @@
   .btn:disabled { opacity: 0.75; cursor: wait; }
   .btn.second { background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid rgba(255, 255, 255, 0.18); margin-top: 10px; font-weight: 700; font-size: 0.9rem; box-shadow: none; }
   .btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+  .appel { margin-top: 30px; padding: 22px 20px 20px; border-radius: 18px; background: rgba(128, 185, 165, 0.1); border: 1px solid rgba(128, 185, 165, 0.35); }
+  .appel .tag { margin-bottom: 10px; }
+  .appel p strong { color: #fff; }
+  .appel .appel-fin { font-size: 0.82rem; color: rgba(255, 255, 255, 0.6); }
+  .appel .btn { margin-top: 16px; }
   .spin { width: 36px; height: 36px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.2); border-top-color: #80b9a5; margin: 0 auto 18px; animation: t 0.8s linear infinite; }
   @keyframes t { to { transform: rotate(360deg); } }
   .pied { margin-top: 28px; font-size: 0.72rem; color: rgba(255, 255, 255, 0.45); line-height: 1.5; }
@@ -63,7 +70,7 @@
   <!-- Soir en cours : e-mail puis direct -->
   <div id="entree" hidden>
     <span class="tag direct" id="entreeTag">Soir 1 · en direct</span>
-    <h1 id="entreeTitre">Où part votre argent</h1>
+    <h1 id="entreeTitre">Construire votre stratégie de base</h1>
     <p>Entrez l'e-mail de votre inscription pour rejoindre le direct.</p>
     <form id="form" novalidate>
       <label for="email">Votre e-mail</label>
@@ -104,8 +111,15 @@
   <div id="fini" hidden>
     <span class="tag">Bootcamp terminé</span>
     <h1>Merci d'avoir suivi le <em>Bootcamp</em>.</h1>
-    <p id="finiTexte">Les replays sont accessibles aux inscrits jusqu'au jeudi 29 octobre à minuit.</p>
-    <a class="btn" id="resa" href="#" target="_blank" rel="noopener" hidden>Réserver mon appel stratégie</a>
+    <p id="finiTexte">Les replays sont accessibles aux inscrits jusqu'au jeudi 29 octobre à 23h59.</p>
+  </div>
+
+  <!-- Appels stratégie : affiché de la FIN DU SOIR 1 à CONFIG.DATE_FERMETURE (hors redirection vers le direct) -->
+  <div class="appel" id="appel" hidden>
+    <span class="tag">Appels stratégie ouverts</span>
+    <p><strong>Vous voulez être accompagné sur votre propre situation ?</strong> Réservez votre appel stratégie : 45 minutes, en visio, offert. Des créneaux s'ouvrent chaque soir, en nombre limité.</p>
+    <p class="appel-fin" id="appelFin"></p>
+    <a class="btn" id="resa" href="#" target="_blank" rel="noopener">Réserver mon appel stratégie</a>
   </div>
 
   <p class="pied">Investir comporte un risque de perte en capital. Le Bootcamp a une vocation pédagogique. <a href="index.html#mentions">Confidentialité</a></p>
@@ -120,6 +134,15 @@
   const TEST = P.get('test') === '1' || P.has('maintenant');
   const SOIRS = B.soirs();
   const t = B.maintenant();
+
+  /* Appels stratégie : de la fin du soir 1 (20/10 22h00) à DATE_FERMETURE */
+  function appels() {
+    if (!B.appelsOuverts(t)) return false;
+    $('resa').href = B.lienReservation(ID);
+    $('appelFin').textContent = 'Réservations ouvertes jusqu\'au ' + B.fermeture().texte + ', ou dès que les ' + C.PLACES_COHORTE + ' places de la cohorte sont prises.' + (B.placesTexte() ? ' ' + B.placesTexte() : '');
+    $('appel').hidden = false;
+    return true;
+  }
   const montrer = el => { ['entree', 'ouvre', 'bientot', 'attente', 'fini'].forEach(k => { $(k).hidden = k !== el; }); };
 
   function ouvrirDirect(url) {
@@ -134,6 +157,7 @@
       $('bientotTag').textContent = 'Soir ' + enCours.n + ' · ce soir';
       $('recharger').href = location.href;
       montrer('bientot');
+      appels();
       return;
     }
     /* Arrivée avec un lien personnel : pas de formulaire */
@@ -175,18 +199,16 @@
     $('agenda').href = B.googleAgenda(prochain, ID);
     $('ics').href = B.icsDataUrl(ID);
     montrer('attente');
+    appels();
     return;
   }
 
   montrer('fini');
-  const finAppels = new Date('2026-10-29T23:59:59+01:00');
-  if (C.RESERVATION_URL && t < finAppels.getTime()) {
-    $('resa').href = C.RESERVATION_URL + (ID ? (C.RESERVATION_URL.indexOf('?') > -1 ? '&' : '?') + 'i=' + ID : '');
-    $('resa').hidden = false;
-    $('finiTexte').textContent = "Les appels stratégie sont ouverts jusqu'au jeudi 29 octobre à 23h59, et les replays restent accessibles aux inscrits jusque-là.";
-  } else if (t >= finAppels.getTime()) {
-    $('finiTexte').textContent = 'Les replays et les appels stratégie du Bootcamp sont fermés. Merci de votre participation.';
-  }
+  const ferme = t >= B.fermeture().date.getTime();
+  $('finiTexte').textContent = ferme
+    ? 'Les replays et les appels stratégie du Bootcamp sont fermés. Merci de votre participation.'
+    : "Les replays restent accessibles aux inscrits jusqu'au " + B.fermeture().texte + '.';
+  appels();
 })();
 </script>
 </body>

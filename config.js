@@ -1,26 +1,37 @@
 /* =====================================================================
    BOOTCAMP INVESTISSEURS 3.0 · CONFIG (la seule zone à modifier)
-   Utilisée par index.html, merci.html, rejoindre.html, direct.html et console.html.
+   Utilisée par index.html, merci.html, rejoindre.html, direct.html,
+   appel-confirme.html et console.html. Source du discours : ../BRIEF.md (18/09/2026).
 
    - SESSIONS : les 3 soirs, heure de Paris (+02:00 jusqu'au 25/10/2026).
    - DUREE_MIN : durée d'un soir en minutes.
-   - SOIRS : titre, promesse et ressource de chaque soir (BRIEF §5 et §6).
-   - VARIANTES : A/B du haut de page. « accent » = morceau du titre en sauge.
+   - SOIRS : pour chaque soir (BRIEF §5 et §6) : titre, promesse, cas (le cas concret),
+     ressource (remise aux présents, en direct) + ressourceDetail, et ressourceWa
+     (ressource réservée au groupe WhatsApp ; vide = rien d'affiché pour ce soir).
+   - DATE_FERMETURE : fin des réservations d'appel et des replays. Heure d'hiver
+     à partir du 25/10/2026, donc +01:00 le 29/10.
+     Les appels s'ouvrent à la FIN DU SOIR 1 (SESSIONS[0] + DUREE_MIN) : le bouton
+     de réservation de rejoindre.html et direct.html s'affiche de là à DATE_FERMETURE.
+   - PLACES_COHORTE : taille de la cohorte du Club ouverte à l'occasion du Bootcamp.
+   - PLACES_RESTANTES : null = rien d'affiché. Un nombre = « Il reste N places sur 50 »
+     (rejoindre.html, direct.html, FAQ de index.html). À n'utiliser que si c'est VRAI.
+   - VARIANTES : A/B du haut de page (BRIEF §4). « accent » = morceau du titre en sauge
+     (\\u00a0 = espace insécable, pour ne pas couper « de A à Z » ; à garder identique dans titre et accent).
    - WEBHOOK_URL : URL /exec de l'Apps Script (dossier webhook/). Vide = rien
      n'est envoyé (la page marche quand même, pratique pour tester).
    - STATS_KEY : clé de la route stats (agrégats seulement, aucune donnée
      personnelle). Même valeur que STATS_KEY dans webhook/Code.js.
    - VIDEO_URL : vidéo de présentation (YouTube, Vimeo, Loom, Drive ou .mp4).
-     Vide = visuel de remplacement avec la photo de Thomas.
-   - VIDEO_MERCI_URL : vidéo de 60 s de la page merci. Vide = encart « bientôt ».
-   - GROUPES_WHATSAPP : liens d'invitation. Vide = bouton masqué. Plusieurs
-     liens = un tiré au hasard par inscrit (répartit la charge entre groupes).
+     Vide = encart vidéo masqué (le programme court des 3 soirs le remplace sur ordinateur).
+   - VIDEO_MERCI_URL : vidéo de 60 s de la page merci. Vide = étape masquée.
+   - GROUPES_WHATSAPP : liens d'invitation. Vide = étape WhatsApp masquée sur merci.html.
+     Plusieurs liens = un tiré au hasard par inscrit (répartit la charge entre groupes).
    - LIVE_URLS : lien du direct de chaque soir (YouTube non répertorié), ouvert par
      rejoindre.html (lien perso) et direct.html (lien commun, demande l'e-mail).
      Vide = « le lien s'active à 19h45 le jour J ».
    - RESERVATION_URL : événement iClosed « Appel Stratégie - Bootcamp Investisseurs 3.0 » (questions + calendrier).
      Après réservation, iClosed redirige vers appel-confirme.html (tag « a réservé » + pixel Schedule).
-     Affiché sur rejoindre.html et direct.html après le soir 3, avec ?i=<Id>.
+     Affiché sur rejoindre.html et direct.html dès la fin du soir 1, avec ?i=<Id>.
    - META_PIXEL_ID : pixel Meta. Vide = aucun pixel. Avec PIXEL_CONSENT à true,
      il ne se charge qu'après « Accepter » (règle CNIL).
    - COMPTEUR_MIN : le nombre d'inscrits ne s'affiche qu'à partir de ce seuil.
@@ -38,37 +49,47 @@ window.CONFIG = {
 
   SOIRS: [
     {
-      titre: "Où part votre argent",
-      promesse: "Voir ce que vos frais, votre inflation et votre attente vous coûtent vraiment, et comment récupérer ce qui vous revient.",
-      ressource: "Le Détecteur de frais",
-      ressourceDetail: "Entrez vos contrats : il calcule ce que les frais vous coûtent sur 10, 20 et 30 ans."
+      titre: "Construire votre stratégie de base",
+      promesse: "Comprendre ce qu'est une vraie stratégie, savoir chez qui et dans quelles enveloppes mettre votre argent, et par quel investissement commencer selon votre profil.",
+      cas: "Le profil classique en banque traditionnelle : des livrets et une assurance vie chargée en frais. Budget, épargne de précaution, analyse et sortie des contrats bancaires, ouverture des bonnes enveloppes.",
+      ressource: "Le comparatif CTO, PEA, assurance vie, PER, PEE",
+      ressourceDetail: "Les 5 enveloppes côte à côte, pour savoir laquelle ouvrir en premier.",
+      ressourceWa: "La liste des meilleures plateformes par enveloppe"
     },
     {
-      titre: "Faire travailler votre argent",
-      promesse: "La méthode pour construire une stratégie simple, sans intermédiaire : quelles enveloppes, quelle répartition, comment l'automatiser.",
-      ressource: "Le Plan de répartition",
-      ressourceDetail: "PEA, assurance vie en ligne, PER, compte-titres : 3 profils pédagogiques et la checklist d'ouverture."
+      titre: "Le choix des placements",
+      promesse: "Savoir construire un portefeuille bourse antifragile, et savoir si, et sous quelle forme, l'immobilier et les autres placements ont leur place dans votre stratégie.",
+      cas: "La suite du profil du soir 1 : son portefeuille ligne par ligne, la place de l'immobilier, les montants et les enveloppes.",
+      ressource: "Le top 10 des ETF éligibles au PEA",
+      ressourceDetail: "Une liste pédagogique et comparative, pas une recommandation personnalisée.",
+      ressourceWa: "La checklist d'une bonne affaire en immobilier"
     },
     {
-      titre: "Votre plan d'indépendance",
-      promesse: "Chiffrer votre objectif de liberté financière, poser votre plan d'action sur 90 jours et savoir par où commencer lundi.",
-      ressource: "Le Plan 90 jours",
-      ressourceDetail: "La feuille de route semaine par semaine et le calcul de votre chiffre d'indépendance."
+      titre: "Votre stratégie de A à Z",
+      promesse: "Voir trois stratégies complètes se construire en direct, à trois niveaux de patrimoine, et repartir avec la trame pour faire la vôtre.",
+      cas: "Trois cas, du plus simple au plus étayé : 500\u00a0€ par mois sans capital ; 300\u00a0€ par mois et 20\u00a0000\u00a0€ ; 100\u00a0000\u00a0€ et plus à investir.",
+      ressource: "La trame de stratégie en 5 étapes",
+      ressourceDetail: "Situation, objectifs et horizon, profil, allocation, calendrier d'exécution.",
+      ressourceWa: ""
     }
   ],
 
+  DATE_FERMETURE: "2026-10-29T23:59:00+01:00",
+  PLACES_COHORTE: 50,
+  PLACES_RESTANTES: null,
+
   VARIANTES: {
     a: {
-      nom: "Contrôle",
-      titre: "Reprenez le contrôle de votre argent en 3 soirées.",
-      accent: "en 3 soirées.",
-      sousTitre: "Du 20 au 22 octobre à 20h, Thomas Mayol vous montre en direct comment construire une stratégie d'investissement qui travaille pour vous : sans banque, sans frais cachés, sans dépendre de personne. Gratuit, en ligne, sur 3 cas réels."
+      nom: "Promesse de A à Z",
+      titre: "Votre stratégie d'investissement complète, de\u00a0A\u00a0à\u00a0Z, en 3\u00a0soirées.",
+      accent: "de\u00a0A\u00a0à\u00a0Z, en 3\u00a0soirées.",
+      sousTitre: "Du 20 au 22 octobre à 20h, Thomas Mayol et ses experts construisent en direct une stratégie d'investissement comme le font les professionnels : les bonnes enveloppes, les bons placements, puis 3 cas concrets assemblés devant vous. Vous la gérez ensuite en totale autonomie. Gratuit, en ligne."
     },
     b: {
-      nom: "Frais cachés",
+      nom: "L'ennemi (la banque)",
       titre: "Votre argent peut travailler pour vous. Votre banque ne vous montrera pas comment.",
       accent: "Votre banque ne vous montrera pas comment.",
-      sousTitre: "3 soirées en direct avec Thomas Mayol, du 20 au 22 octobre à 20h : où partent vos frais, comment investir par vous-même, et le plan pour passer à l'action. Gratuit, en ligne, sur 3 cas réels."
+      sousTitre: "3 soirées en direct avec Thomas Mayol et ses experts, du 20 au 22 octobre à 20h : on construit une stratégie d'investissement complète, de A à Z, sans intermédiaire ni frais cachés, sur 3 cas concrets. Gratuit, en ligne."
     }
   },
 
@@ -85,7 +106,7 @@ window.CONFIG = {
   OBJECTIF_INSCRITS: 3000,
   OBJECTIF_PRESENTS: 750,
   URL_PAGE: "https://alexyoucompte99-lang.github.io/bootcamp-investisseurs30/",
-  SOURCE: "lp-bootcamp-i3-v1"
+  SOURCE: "lp-bootcamp-i3-v2"
 };
 
 
@@ -136,6 +157,27 @@ window.BOOTCAMP = (function () {
     });
   }
 
+  /* ---------- Appels stratégie : ouverts de la fin du soir 1 à DATE_FERMETURE ---------- */
+  function fermeture() {
+    var d = new Date(C.DATE_FERMETURE);
+    return { date: d, texte: fmt({ weekday: 'long', day: 'numeric', month: 'long' }).format(d) + ' à ' + heure(d) };
+  }
+  function appelsOuverts(t) {
+    var debut = new Date(C.SESSIONS[0]).getTime() + C.DUREE_MIN * 60000;
+    return !!C.RESERVATION_URL && t >= debut && t < fermeture().date.getTime();
+  }
+  function lienReservation(id) {
+    var u = C.RESERVATION_URL || '';
+    return u + (u && idValide(id) ? (u.indexOf('?') > -1 ? '&' : '?') + 'i=' + id : '');
+  }
+  /* « Il reste N places sur 50 » : seulement si PLACES_RESTANTES est un nombre (donc un chiffre réel) */
+  function placesTexte() {
+    var n = C.PLACES_RESTANTES;
+    if (typeof n !== 'number' || !(n >= 0) || n > C.PLACES_COHORTE) return '';
+    if (n === 0) return 'Les ' + C.PLACES_COHORTE + ' places de la cohorte sont prises.';
+    return 'Il reste ' + n + (n > 1 ? ' places' : ' place') + ' sur ' + C.PLACES_COHORTE + '.';
+  }
+
   /* Identifiant court d'un inscrit : 8 caractères, calculé depuis l'e-mail.
      Même e-mail = même Id, sur la page comme dans le webhook (même empreinte). */
   function idDepuisEmail(email) {
@@ -164,7 +206,7 @@ window.BOOTCAMP = (function () {
     return s.promesse + '\n\n'
       + 'Votre lien personnel pour rejoindre le direct (actif dès 19h45) :\n' + lienPerso(id) + '\n\n'
       + 'Ordinateur de préférence, de quoi noter, et soyez là à ' + s.heure + ' pile.\n'
-      + 'Ressource du soir : ' + s.ressource + '.';
+      + 'Remis aux présents, en direct : ' + s.ressource + '.';
   }
   function googleAgenda(s, id) {
     return 'https://calendar.google.com/calendar/render?action=TEMPLATE'
@@ -283,7 +325,7 @@ window.BOOTCAMP = (function () {
   function estFichierVideo(url) { return /\.(mp4|webm|mov)(\?|#|$)/i.test(String(url || '')); }
 
   return {
-    soirs: soirs, maintenant: maintenant, idDepuisEmail: idDepuisEmail, idValide: idValide, lienPerso: lienPerso,
+    soirs: soirs, maintenant: maintenant, fermeture: fermeture, appelsOuverts: appelsOuverts, lienReservation: lienReservation, placesTexte: placesTexte, idDepuisEmail: idDepuisEmail, idValide: idValide, lienPerso: lienPerso,
     googleAgenda: googleAgenda, ics: ics, icsDataUrl: icsDataUrl,
     envoyer: envoyer, balise: balise, appareil: appareil, pixel: pixel,
     urlEmbed: urlEmbed, estFichierVideo: estFichierVideo
